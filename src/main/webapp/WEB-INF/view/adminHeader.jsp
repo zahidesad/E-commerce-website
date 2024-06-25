@@ -1,9 +1,9 @@
-<%@page errorPage="../error.jsp"%>
+<%@page errorPage="error.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="../../css/home-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home-style.css">
 </head>
 <body>
 <!--Header-->
@@ -11,7 +11,7 @@
 <div class="topnav sticky">
     <% String email = session.getAttribute("email").toString(); %>
     <center><h2>Online shopping</h2></center>
-    <a href="addNewProduct.jsp">Add New Product <i class="fas fa-plus"></i></a>
+    <a href="addNewProduct">Add New Product <i class="fas fa-plus"></i></a>
     <a href="allProductEditProduct.jsp">All Products & Edit Products <i class="fas fa-edit"></i></a>
     <a href="">Messages Received <i class="fas fa-comments"></i></a>
     <a href="">Orders Received <i class="fas fa-box"></i></a>

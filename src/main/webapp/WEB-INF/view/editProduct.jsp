@@ -1,7 +1,7 @@
 <%@page import="com.connection.ConnectionProvider"%>
 <%@page import="java.sql.*"%>
 <%@include file="adminHeader.jsp"%>
-<%@include file="../footer.jsp"%>
+<%@include file="footer.jsp"%>
 
 <!DOCTYPE html>
 <html>

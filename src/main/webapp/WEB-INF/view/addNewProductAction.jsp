@@ -9,7 +9,7 @@
     String active = request.getParameter("active");
 
     try {
-        Connection com.connection = ConnectionProvider.getConnection();
+        Connection connection = ConnectionProvider.getConnection();
         PreparedStatement statement = connection.prepareStatement("insert into product values (?,?,?,?,?)");
         statement.setString(1, id);
         statement.setString(2, name);
