@@ -8,7 +8,7 @@
     String price = request.getParameter("price");
     String active = request.getParameter("active");
     try {
-        Connection com.connection = ConnectionProvider.getConnection();
+        Connection connection = ConnectionProvider.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("update product set name ='" + name + "',category='" +category+ "',price='" +price+ "',active='"+active+"' where id='"+id+"'");
         if (active.equals("No")) {

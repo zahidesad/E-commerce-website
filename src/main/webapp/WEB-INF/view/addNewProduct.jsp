@@ -1,49 +1,23 @@
-<%@page import="com.connection.ConnectionProvider"%>
-<%@page import="java.sql.*"%>
-<%@include file="adminHeader.jsp"%>
-<%@include file="footer.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="adminHeader.jsp" %>
+<%@ include file="footer.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
- <link rel="stylesheet" href="../../css/addNewProduct-style.css">
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/addNewProduct-style.css">
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home-style.css">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
  <title>Add New Product</title>
 </head>
 <body>
 
-<%
- String msg = request.getParameter("msg");
- if("done".equals(msg)){
-%>
-<h3 class="alert">Product Added Successfully!</h3>
-<%} %>
+<c:if test="${not empty message}">
+ <h3 class="alert">${message}</h3>
+</c:if>
 
-<%
- if("wrong".equals(msg)){
-%>
-<h3 class="alert">Something went wrong! Try Again!</h3>
-<%}%>
-
-<%
- int id = 1;
- try {
-  Connection con = ConnectionProvider.getConnection();
-  Statement st = con.createStatement();
-  ResultSet rs = st.executeQuery("select max(id) from product");
-  while (rs.next()) {
-   id = rs.getInt(1);
-   id++;
-  }
-
- } catch (Exception e) {
-  e.printStackTrace();
- }
-
-%>
-
-<form action="addNewProductAction.jsp" method="post">
- <h3 style="color: yellow;">Product ID: <%out.println(id); %> </h3>
- <input type="hidden" name="id" value="<%out.println(id); %>">
+<form action="${pageContext.request.contextPath}/addNewProduct" method="post">
+ <h3 style="color: yellow;">Product ID: ${productId} </h3>
+ <input type="hidden" name="id" value="${productId}">
 
  <div class="left-div">
   <h3>Enter Name</h3>

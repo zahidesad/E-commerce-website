@@ -12,7 +12,7 @@ public class User {
     private String state;
     private String country;
 
-    // Getters and Setters
+
     public String getName() {
         return name;
     }
