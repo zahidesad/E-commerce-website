@@ -14,7 +14,7 @@
             <input type="submit" value="Login">
         </form>
 
-        <h2><a href="<c:url value='/register' />">SignUp</a></h2>
+        <h2><a href="<c:url value='/register' />">Sign Up</a></h2>
         <h2><a href="<c:url value='/forgotPassword' />">Forgot Password?</a></h2>
     </div>
     <div class='whysignLogin'>

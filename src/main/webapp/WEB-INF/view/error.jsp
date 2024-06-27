@@ -22,6 +22,6 @@ color:white;}
 <body>
 <h1>Something went Wrong!</h1>
 <h1>So go for login! Try again!</h1>
-<h1><a href="login.jsp">login</a></h1>
+<h1><a href="${pageContext.request.contextPath}/login">login</a></h1>
 </body>
 </html>

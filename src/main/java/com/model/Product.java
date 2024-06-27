@@ -6,7 +6,8 @@ public class Product {
     private String category;
     private double price;
     private String active;
-
+    private int quantity;
+    private double total;
 
     public int getId() {
         return id;
@@ -47,5 +48,20 @@ public class Product {
     public void setActive(String active) {
         this.active = active;
     }
-}
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+}

@@ -52,4 +52,30 @@ public class UserController {
         }
         return "redirect:/home";
     }
+
+    @GetMapping("/myCart")
+    public String showMyCart(Model model, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        List<Product> products = cartService.getCartProducts(email);
+        int total = cartService.getCartTotal(email);
+        model.addAttribute("products", products);
+        model.addAttribute("total", total);
+        return "myCart";
+    }
+
+    @GetMapping("/incDecQuantity")
+    public String incDecQuantity(@RequestParam("id") int productId, @RequestParam("quantity") String incDec, HttpSession session, RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("email");
+        String message = cartService.updateCartQuantity(email, productId, incDec);
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/myCart";
+    }
+
+    @GetMapping("/removeFromCart")
+    public String removeFromCart(@RequestParam("id") int productId, HttpSession session, RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("email");
+        cartService.removeFromCart(email, productId);
+        redirectAttributes.addFlashAttribute("message", "Product Successfully Removed!");
+        return "redirect:/myCart";
+    }
 }
