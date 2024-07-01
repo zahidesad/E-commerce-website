@@ -8,10 +8,12 @@
 <body>
 <div id='container'>
     <div class='signup'>
-        <form action="<c:url value='/login' />" method="post">
-            <input type="email" name="email" placeholder="Enter Email" required>
-            <input type="password" name="password" placeholder="Enter Password" required>
-            <input type="submit" value="Login">
+        <form action="<c:url value='/j_spring_security_check'/>" method="post">
+            <label for="j_username">Email:</label>
+            <input type="text" id="j_username" name="j_username" required>
+            <label for="j_password">Password:</label>
+            <input type="password" id="j_password" name="j_password" required>
+            <button type="submit">Login</button>
         </form>
 
         <h2><a href="<c:url value='/register' />">Sign Up</a></h2>
@@ -19,11 +21,11 @@
     </div>
     <div class='whysignLogin'>
         <c:choose>
-            <c:when test="${msg == 'invalid'}">
-                <h1>Something Went Wrong! Try Again !</h1>
+            <c:when test="${param.error != null}">
+                <h1>Invalid username or password.</h1>
             </c:when>
-            <c:when test="${msg == 'notexist'}">
-                <h1>Incorrect Username or Password</h1>
+            <c:when test="${param.logout != null}">
+                <h1>You have been logged out.</h1>
             </c:when>
         </c:choose>
         <h2>Online Shopping</h2>
