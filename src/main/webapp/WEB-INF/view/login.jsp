@@ -1,14 +1,14 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="css/signup-style.css">
     <title>Login</title>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 </head>
 <body>
 <div id='container'>
     <div class='signup'>
-        <form action="<c:url value='/j_spring_security_check'/>" method="post">
+        <form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
             <label for="j_username">Email:</label>
             <input type="text" id="j_username" name="j_username" required>
             <label for="j_password">Password:</label>
