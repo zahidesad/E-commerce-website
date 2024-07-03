@@ -9,9 +9,9 @@
 <div id='container'>
     <div class='signup'>
         <form action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
-            <label for="j_username">Email:</label>
+            <label for="j_username"></label>
             <input type="email" id="j_username" name="j_username" placeholder="Enter Email" required>
-            <label for="j_password">Password:</label>
+            <label for="j_password"></label>
             <input type="password" id="j_password" name="j_password" placeholder="Enter Password" required>
             <button type="submit">Login</button>
         </form>

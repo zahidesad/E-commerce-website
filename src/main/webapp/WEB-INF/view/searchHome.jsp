@@ -11,7 +11,7 @@
     <title>Search Results</title>
 </head>
 <body>
-<div style="color: white; text-align: center; font-size: 30px;">Search Results <i class="fa fa-institution"></i></div>
+<div style="color: black; text-align: center; font-size: 30px;">Search Results <i class="fa fa-institution"></i></div>
 <table>
     <thead>
     <tr>
