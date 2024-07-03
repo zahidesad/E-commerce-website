@@ -38,7 +38,6 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-
   <!-- Context Loader Listener -->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -49,8 +48,5 @@
     <param-value>/WEB-INF/spring-security.xml, /WEB-INF/spring-servlet.xml</param-value>
   </context-param>
 
-  <welcome-file-list>
-    <welcome-file>login.jsp</welcome-file>
-  </welcome-file-list>
 
 </web-app>

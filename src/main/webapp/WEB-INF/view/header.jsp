@@ -22,6 +22,29 @@
             padding: 14px 16px;
             color: white;
         }
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .search-container input[type="text"] {
+            padding: 6px;
+            margin-right: 6px;
+            font-size: 17px;
+            border: none;
+            border-radius: 4px;
+        }
+        .search-container button {
+            padding: 6px 10px;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .search-container button:hover {
+            background: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -42,8 +65,8 @@
     <a href="">About <i class="fa fa-address-book"></i></a>
     <a href="<c:url value='/logout'/>">Logout <i class='fas fa-share-square'></i></a>
     <div class="search-container">
-        <form action="<c:url value='/searchHome'/>" method="post">
-            <input type="text" placeholder="Search" name="search">
+        <form action="<c:url value='/search'/>" method="get">
+            <input type="text" placeholder="Search" name="query">
             <button type="submit"><i class="fa fa-search"></i></button>
         </form>
     </div>

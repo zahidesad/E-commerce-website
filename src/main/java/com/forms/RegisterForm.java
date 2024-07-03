@@ -3,7 +3,7 @@ package com.forms;
 public class RegisterForm {
     private String name;
     private String email;
-    private String mobileNumber;
+    private int mobileNumber;
     private String securityQuestion;
     private String answer;
     private String password;
@@ -25,11 +25,11 @@ public class RegisterForm {
         this.email = email;
     }
 
-    public String getMobileNumber() {
+    public int getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
+    public void setMobileNumber(int mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 

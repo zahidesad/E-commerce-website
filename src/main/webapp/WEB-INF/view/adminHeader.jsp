@@ -10,6 +10,7 @@
             justify-content: center;
             align-items: center;
             background-color: #333;
+            padding: 14px;
         }
         .topnav a {
             padding: 14px 16px;

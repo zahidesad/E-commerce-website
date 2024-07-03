@@ -35,7 +35,7 @@ public class RegisterController {
         user.setState("");
         user.setCountry("");
 
-        if (userService.register(user)) {
+        if (userService.register(user) != null) {
             model.addAttribute("msg", "valid");
             return "redirect:/login";
         }

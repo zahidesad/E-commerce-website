@@ -21,8 +21,9 @@
             <input type="password" name="newPassword" placeholder="Enter your new password to set" required>
             <input type="submit" value="Save">
         </form>
-
-        <h2><a href="<c:url value='/login' />">Login</a></h2>
+        <div class="links">
+            <h2><a href="<c:url value='/login' />">Login</a></h2>
+        </div>
     </div>
     <div class='whyforgotPassword'>
         <c:choose>
@@ -30,14 +31,14 @@
                 <h1>Password Changed Successfully!</h1>
             </c:when>
             <c:when test="${param.msg == 'invalid'}">
-                <h1>Something Went Wrong! Try Again !</h1>
+                <h1>Something Went Wrong! Try Again!</h1>
             </c:when>
             <c:when test="${param.msg == 'notexist'}">
                 <h1>User does not exist! Please sign up!</h1>
             </c:when>
         </c:choose>
         <h2>Online Shopping</h2>
-        <p>The Online Shopping System is the application that allows the users to shop online without going to the shops to buy them.</p>
+        <p>The Online Shopping System allows users to shop online without visiting the stores.</p>
     </div>
 </div>
 </body>

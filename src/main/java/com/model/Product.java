@@ -1,13 +1,19 @@
 package com.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String category;
-    private double price;
+    private int price;
     private String active;
-    private int quantity;
-    private double total;
+
 
     public int getId() {
         return id;
@@ -33,11 +39,11 @@ public class Product {
         this.category = category;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -47,21 +53,5 @@ public class Product {
 
     public void setActive(String active) {
         this.active = active;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 }

@@ -5,18 +5,25 @@
 <html>
 <head>
     <title>welcome</title>
-    <style>
-        h1 {
-            color: white;
-            text-align: center;
-            font-size: 80px;
-        }
-        body {
-            background-color: #2196F3;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin-home-style.css">
 </head>
 <body>
-<h1>Welcome admin!</h1>
+<div class="content">
+    <h1>Welcome admin!</h1>
+    <div class="quick-links">
+        <div class="card">
+            <h2>Add New Product</h2>
+            <a href="addNewProduct">Go to Add Product</a>
+        </div>
+        <div class="card">
+            <h2>View Orders</h2>
+            <a href="">Go to Orders</a>
+        </div>
+        <div class="card">
+            <h2>Manage Products</h2>
+            <a href="allProductEditProduct">Go to Manage Products</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

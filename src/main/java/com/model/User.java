@@ -1,17 +1,55 @@
 package com.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
-    private String mobileNumber;
+
+    @Column(name = "mobile_number")
+    private int mobileNumber;
+
+    @Column(name = "security_question")
     private String securityQuestion;
+
+    @Column(name = "answer")
     private String answer;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "state")
     private String state;
+
+    @Column(name = "country")
     private String country;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -29,11 +67,11 @@ public class User {
         this.email = email;
     }
 
-    public String getMobileNumber() {
+    public int getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
+    public void setMobileNumber(int mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 
@@ -92,5 +130,12 @@ public class User {
     public void setCountry(String country) {
         this.country = country;
     }
-}
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+}

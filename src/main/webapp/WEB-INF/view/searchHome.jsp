@@ -7,10 +7,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Home</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css">
+    <title>Search Results</title>
 </head>
 <body>
-<div style="color: white; text-align: center; font-size: 30px;">Home <i class="fa fa-institution"></i></div>
+<div style="color: white; text-align: center; font-size: 30px;">Search Results <i class="fa fa-institution"></i></div>
 <table>
     <thead>
     <tr>
@@ -28,7 +29,13 @@
             <td>${product.name}</td>
             <td>${product.category}</td>
             <td><i class="fa fa-inr"></i> ${product.price}</td>
-            <td><a href="<c:url value='/addToCart'/>?id=${product.id}">Add to cart <i class='fas fa-cart-plus'></i></a></td>
+            <td>
+                <form action="<c:url value='/addToCart'/>" method="post">
+                    <input type="hidden" name="productId" value="${product.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit">Add to cart <i class='fas fa-cart-plus'></i></button>
+                </form>
+            </td>
         </tr>
     </c:forEach>
     </tbody>
