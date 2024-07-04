@@ -1,7 +1,9 @@
 package com.service;
 
 import com.model.User;
+import com.model.UserRole;
 import com.repository.UserRepository;
+import com.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
@@ -49,6 +54,13 @@ public class UserService {
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        UserRole userRole = new UserRole();
+        userRole.setEmail(savedUser.getEmail());
+        userRole.setRole("ROLE_USER");
+        userRoleRepository.save(userRole);
+
+        return savedUser;
     }
 }

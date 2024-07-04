@@ -51,7 +51,7 @@ public class UserController {
         if (loggedInUser != null) {
             return ResponseEntity.ok(loggedInUser);
         } else {
-            return ResponseEntity.status(401).build(); // Unauthorized
+                return ResponseEntity.status(401).build(); // Unauthorized
         }
     }
 
