@@ -68,4 +68,10 @@ public class AdminController {
         productService.updateProduct(product);
         return "redirect:/allProductEditProduct";
     }
+
+    @PostMapping("/deleteProduct")
+    public String deleteProduct(@RequestParam("productId") Long productId) {
+        productService.deleteProductById(productId);
+        return "redirect:/allProductEditProduct";
+    }
 }

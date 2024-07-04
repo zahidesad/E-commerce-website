@@ -13,6 +13,9 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CartService cartService;
+
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
@@ -26,7 +29,8 @@ public class ProductService {
     }
 
     public void deleteProductById(Long id) {
-        productRepository.deleteById(id);
+        cartService.deleteCartItemByProductId(id); // First delete product from cart
+        productRepository.deleteById(id); // Then, delete product
     }
 
     public List<Product> getProductsByCategory(String category) {

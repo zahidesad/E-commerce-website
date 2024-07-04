@@ -3,6 +3,7 @@ package com.service;
 import com.model.Cart;
 import com.model.Product;
 import com.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +70,10 @@ public class CartService {
     public void clearCartByEmail(String email) {
         List<Cart> carts = cartRepository.findByEmail(email);
         cartRepository.deleteAll(carts);
+    }
+
+    @Transactional
+    public void deleteCartItemByProductId(Long productId) {
+        cartRepository.deleteByProductId(productId);
     }
 }

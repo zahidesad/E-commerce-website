@@ -29,21 +29,6 @@
     <div class="content">
         <table>
             <thead>
-            <c:choose>
-                <c:when test="${total > 0}">
-                    <tr>
-                        <th class="total-header">Total: <i class="fa fa-inr"></i> ${total} </th>
-                        <th><a class="proceed-link" href="addressPaymentForOrder.jsp">Proceed to order</a></th>
-                    </tr>
-                </c:when>
-                <c:otherwise>
-                    <tr>
-                        <th class="total-header">Total: <i class="fa fa-inr"></i> ${total} </th>
-                    </tr>
-                </c:otherwise>
-            </c:choose>
-            </thead>
-            <thead>
             <tr>
                 <th scope="col">S.No</th>
                 <th scope="col">Product Name</th>
@@ -83,6 +68,17 @@
             </c:forEach>
             </tbody>
         </table>
+        <div class="total-container">
+            <c:choose>
+                <c:when test="${total > 0}">
+                    <div class="total-header">Total: <i class="fa fa-inr"></i> ${total} </div>
+                    <a class="proceed-link" href="addressPaymentForOrder.jsp">Proceed to order</a>
+                </c:when>
+                <c:otherwise>
+                    <div class="total-header">Total: <i class="fa fa-inr"></i> ${total} </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 </div>
 </body>

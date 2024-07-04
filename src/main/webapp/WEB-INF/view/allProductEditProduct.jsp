@@ -20,6 +20,7 @@
             <th>PRICE</th>
             <th>ACTIVE</th>
             <th>EDIT</th>
+            <th>DELETE</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +31,14 @@
                 <td>${product.category}</td>
                 <td>${product.price}</td>
                 <td>${product.active}</td>
-                <td><a href="<c:url value='/editProduct?id=${product.id}'/>">Edit</a></td>
+                <td><a href="<c:url value='/editProduct?id=${product.id}'/>" class="btn-edit">Edit</a>
+                </td>
+                <td>
+                    <form action="<c:url value='/deleteProduct'/>" method="post">
+                        <input type="hidden" name="productId" value="${product.id}">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

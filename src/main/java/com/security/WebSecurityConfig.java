@@ -18,7 +18,10 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/register"), new AntPathRequestMatcher("/forgotPassword")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/register"),
+                                new AntPathRequestMatcher("/forgotPassword"),
+                                new AntPathRequestMatcher("/api/products/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -38,5 +41,6 @@ public class WebSecurityConfig {
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
     }
+
 }
 
