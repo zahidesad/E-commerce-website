@@ -18,11 +18,23 @@
   </div>
   <div class="form-group">
    <label for="category">Category:</label>
-   <input type="text" id="category" name="category" required>
+   <select id="category" name="category">
+    <c:forEach var="category" items="${categories}">
+     <option value="${category.id}">${category.name}</option>
+    </c:forEach>
+   </select>
   </div>
   <div class="form-group">
    <label for="price">Price:</label>
    <input type="number" id="price" name="price" required>
+  </div>
+  <div class="form-group">
+   <label for="startDate">Start Date:</label>
+   <input type="date" id="startDate" name="startDate" required>
+  </div>
+  <div class="form-group">
+   <label for="endDate">End Date:</label>
+   <input type="date" id="endDate" name="endDate">
   </div>
   <div class="form-group">
    <label for="active">Active:</label>

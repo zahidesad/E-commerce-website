@@ -2,7 +2,7 @@ package com.forms;
 
 public class ForgotPasswordForm {
     private String email;
-    private int mobileNumber;
+    private String mobileNumber;
     private String securityQuestion;
     private String answer;
     private String newPassword;
@@ -16,11 +16,11 @@ public class ForgotPasswordForm {
         this.email = email;
     }
 
-    public int getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(int mobileNumber) {
+    public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 

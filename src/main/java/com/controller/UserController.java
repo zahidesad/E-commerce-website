@@ -56,8 +56,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
-        userService.register(user);
-        return "redirect:/login";
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        User savedUser = userService.register(user);
+        return ResponseEntity.ok(savedUser);
     }
 }

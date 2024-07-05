@@ -3,10 +3,13 @@ package com.controller;
 import com.model.Product;
 import com.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +20,16 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product savedProduct = productService.saveProduct(product);
-        return ResponseEntity.ok(savedProduct);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product,
+                                                 @RequestParam BigDecimal price,
+                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+                                                 @RequestParam List<Long> categoryIds) {
+        productService.saveProduct(product, price, startDate, endDate, categoryIds);
+        return ResponseEntity.ok(product);
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -40,9 +49,9 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category) {
-        List<Product> products = productService.getProductsByCategory(category);
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long categoryId) {
+        List<Product> products = productService.getProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
     }
 
@@ -52,5 +61,4 @@ public class ProductController {
         model.addAttribute("products", products);
         return "searchHome";
     }
-
 }

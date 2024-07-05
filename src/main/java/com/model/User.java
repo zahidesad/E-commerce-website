@@ -9,39 +9,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "mobile_number")
-    private int mobileNumber;
-
-    @Column(name = "security_question")
+    private String mobileNumber;
     private String securityQuestion;
-
-    @Column(name = "answer")
     private String answer;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "state")
-    private String state;
-
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "enabled")
-    private boolean enabled;
-
 
     public Long getId() {
         return id;
@@ -67,11 +39,11 @@ public class User {
         this.email = email;
     }
 
-    public int getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(int mobileNumber) {
+    public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 
@@ -99,36 +71,12 @@ public class User {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
+    public String getRole() {
+        return role;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public boolean isEnabled() {
@@ -138,4 +86,10 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    private String password;
+    private String role;
+    private boolean enabled;
+
+
 }

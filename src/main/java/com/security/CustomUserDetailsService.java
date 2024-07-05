@@ -44,7 +44,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private List<GrantedAuthority> getAuthorities(String email) {
-        String roleQuery = "SELECT role FROM user_roles WHERE email = ?";
+        String roleQuery = "SELECT role FROM users WHERE email = ?";
         List<String> roles = jdbcTemplate.queryForList(roleQuery, String.class, email);
 
         List<GrantedAuthority> authorities = new ArrayList<>();

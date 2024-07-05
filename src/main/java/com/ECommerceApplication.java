@@ -10,9 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class ECommerceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ECommerceApplication.class, args);
-        /* BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = "admin";
+        /*BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String rawPassword = "123";
         String encodedPassword = encoder.encode(rawPassword);
-        System.out.println(encodedPassword);*/
+        System.out.println(encodedPassword); */
     }
 }

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Controller
 public class CartController {
-
     @Autowired
     private CartService cartService;
 
@@ -26,53 +25,40 @@ public class CartController {
 
     @GetMapping("/myCart")
     public String viewCart(HttpSession session, Model model) {
-        String email = (String) session.getAttribute("email");
-        if (email == null) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
-        List<Cart> cartItems = cartService.getCartByEmail(email);
-        model.addAttribute("cartItems", cartItems);
+        Cart cart = cartService.getOrCreateCartByUserId(userId);
+        model.addAttribute("cart", cart);
 
-        int total = cartItems.stream().mapToInt(cart -> cart.getTotal()).sum();
+        double total = cart.getCartItems().stream().mapToDouble(item -> item.getTotal().doubleValue()).sum();
         model.addAttribute("total", total);
 
         return "myCart";
     }
 
-
     @PostMapping("/addToCart")
-    public String addToCart(@RequestParam("productId") int productId, @RequestParam("quantity") int quantity, HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        if (email == null) {
+    public String addToCart(@RequestParam("productId") Long productId, @RequestParam("quantity") int quantity, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
 
-        Cart cart = new Cart();
-        cart.setEmail(email);
-        cart.setProductId(productId);
-        cart.setQuantity(quantity);
-
-        Optional<Product> product = productService.getProductById((long) productId);
-        if (product.isPresent()) {
-            cart.setPrice(product.get().getPrice());
-        } else {
-
-            return "redirect:/home?error=ProductNotFound";
-        }
-
-        cartService.addCart(cart);
+        Cart cart = cartService.getOrCreateCartByUserId(userId);
+        cartService.addProductToCart(cart, productId, quantity);
 
         return "redirect:/myCart";
     }
 
     @GetMapping("/incDecQuantity")
-    public String incDecQuantity(@RequestParam("id") int id, @RequestParam("quantity") String quantity) {
-        cartService.updateCartQuantity(id, quantity);
+    public String incDecQuantity(@RequestParam("id") Long id, @RequestParam("quantity") String quantity) {
+        cartService.updateCartItemQuantity(id, quantity);
         return "redirect:/myCart";
     }
 
     @GetMapping("/removeFromCart")
-    public String removeFromCart(@RequestParam("id") int id) {
+    public String removeFromCart(@RequestParam("id") Long id) {
         cartService.removeFromCart(id);
         return "redirect:/myCart";
     }

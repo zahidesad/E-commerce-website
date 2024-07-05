@@ -21,19 +21,4 @@ public class LoginController {
         model.addAttribute("loginForm", new LoginForm());
         return "login";
     }
-
-    /*
-    @PostMapping("/login")
-    public String login(LoginForm loginForm, HttpSession session, Model model) {
-        User user = userService.login(loginForm.getEmail(), loginForm.getPassword());
-        if (user != null) {
-            session.setAttribute("email", user.getEmail());
-            if ("admin@gmail.com".equals(user.getEmail()) && "admin".equals(user.getPassword())) {
-                return "redirect:/adminHome";
-            }
-            return "redirect:/home";
-        }
-        model.addAttribute("msg", "invalid");
-        return "login";
-    } */
 }

@@ -1,12 +1,17 @@
 package com.service;
 
 import com.model.Cart;
+import com.model.CartItem;
 import com.model.Product;
+import com.repository.CartItemRepository;
 import com.repository.CartRepository;
+import com.repository.ProductRepository;
+import com.repository.PriceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,62 +23,75 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Autowired
-    private ProductService productService;
+    private CartItemRepository cartItemRepository;
 
-    public List<Cart> getCartByEmail(String email) {
-        List<Cart> cartItems = cartRepository.findByEmail(email);
+    @Autowired
+    private ProductRepository productRepository;
 
-        return cartItems.stream().map(cartItem -> {
-            Optional<Product> product = productService.getProductById((long) cartItem.getProductId());
-            product.ifPresent(p -> cartItem.setProductName(p.getName()));
-            return cartItem;
-        }).collect(Collectors.toList());
+    @Autowired
+    private PriceRepository priceRepository;
+
+    public Cart getOrCreateCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId).orElseGet(() -> {
+            Cart cart = new Cart();
+            cart.getUser().setId(userId);
+            return cartRepository.save(cart);
+        });
     }
 
+    public void addProductToCart(Cart cart, Long productId, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        BigDecimal currentPrice = priceRepository.findCurrentPriceByProductId(productId);
 
-    public void addCart(Cart cart) {
-        Optional<Cart> existingCartItem = cartRepository.findByEmailAndProductId(cart.getEmail(), cart.getProductId());
+        Optional<CartItem> existingCartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
         if (existingCartItem.isPresent()) {
-            Cart item = existingCartItem.get();
-            item.setQuantity(item.getQuantity() + cart.getQuantity());
-            item.setTotal(item.getQuantity() * item.getPrice());
-            cartRepository.save(item);
+            CartItem item = existingCartItem.get();
+            item.setQuantity(item.getQuantity() + quantity);
+            item.setTotal(currentPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
+            cartItemRepository.save(item);
         } else {
-            cart.setTotal(cart.getQuantity() * cart.getPrice());
-            cartRepository.save(cart);
+            CartItem cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+            cartItem.setPrice(currentPrice);
+            cartItem.setTotal(currentPrice.multiply(BigDecimal.valueOf(quantity)));
+            cartItemRepository.save(cartItem);
         }
     }
 
 
-    public void updateCartQuantity(int id, String action) {
-        Optional<Cart> cartItemOpt = cartRepository.findById((long) id);
+    public void updateCartItemQuantity(Long cartItemId, String action) {
+        Optional<CartItem> cartItemOpt = cartItemRepository.findById(cartItemId);
         if (cartItemOpt.isPresent()) {
-            Cart cartItem = cartItemOpt.get();
+            CartItem cartItem = cartItemOpt.get();
             if ("inc".equals(action)) {
                 cartItem.setQuantity(cartItem.getQuantity() + 1);
             } else if ("dec".equals(action) && cartItem.getQuantity() > 1) {
                 cartItem.setQuantity(cartItem.getQuantity() - 1);
             } else {
-                cartRepository.deleteById((long) id);
+                cartItemRepository.deleteById(cartItemId);
                 return;
             }
-            cartItem.setTotal(cartItem.getPrice() * cartItem.getQuantity());
-            cartRepository.save(cartItem);
+            BigDecimal currentPrice = cartItem.getPrice();
+            cartItem.setTotal(currentPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            cartItemRepository.save(cartItem);
         }
     }
 
-    public void removeFromCart(int id) {
-        cartRepository.deleteById((long) id);
+    public void removeFromCart(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
 
-
-    public void clearCartByEmail(String email) {
-        List<Cart> carts = cartRepository.findByEmail(email);
-        cartRepository.deleteAll(carts);
+    public void clearCartByUserId(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId).orElse(null);
+        if (cart != null) {
+            cartItemRepository.deleteByCartId(cart.getId());
+        }
     }
 
     @Transactional
     public void deleteCartItemByProductId(Long productId) {
-        cartRepository.deleteByProductId(productId);
+        cartItemRepository.deleteByProductId(productId);
     }
 }

@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.forms.RegisterForm;
+import com.model.Address;
 import com.model.User;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,8 @@ public class RegisterController {
         user.setSecurityQuestion(registerForm.getSecurityQuestion());
         user.setAnswer(registerForm.getAnswer());
         user.setPassword(registerForm.getPassword());
-        user.setAddress("");
-        user.setCity("");
-        user.setState("");
-        user.setCountry("");
+        user.setEnabled(true);
+        user.setRole("ROLE_USER");
 
         if (userService.register(user) != null) {
             model.addAttribute("msg", "valid");
