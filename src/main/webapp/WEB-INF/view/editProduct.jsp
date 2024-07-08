@@ -15,21 +15,41 @@
  <form action="<c:url value='/updateProduct'/>" method="post">
   <input type="hidden" name="id" value="${product.id}">
   <div class="form-group">
-   <input type="text" name="name" value="${product.name}" required>
+   <label for="name">Name:</label>
+   <input type="text" id="name" name="name" value="${product.name}" required>
   </div>
   <div class="form-group">
-   <input type="text" name="category" value="${product.category}" required>
+   <label for="category">Category:</label>
+   <select id="category" name="categoryId" required>
+    <c:forEach var="category" items="${categories}">
+     <option value="${category.id}" <c:if test="${category.id == product.categories[0].id}">selected</c:if>>${category.name}</option>
+    </c:forEach>
+   </select>
   </div>
   <div class="form-group">
-   <input type="number" name="price" value="${product.price}" required>
-  </div>
-  <div class="form-group">
-   <select name="active">
+   <label for="active">Active:</label>
+   <select id="active" name="active">
     <option value="Yes" ${product.active == 'Yes' ? 'selected' : ''}>Yes</option>
     <option value="No" ${product.active == 'No' ? 'selected' : ''}>No</option>
    </select>
   </div>
-  <button class="btn">Save <i class='far fa-arrow-alt-circle-right'></i></button>
+  <h3>Current Prices:</h3>
+  <c:forEach var="price" items="${product.prices}">
+   <input type="hidden" name="priceId" value="${price.id}">
+   <div class="form-group">
+    <label for="price_${price.id}">Price:</label>
+    <input type="number" id="price_${price.id}" name="priceAmount" value="${price.price}" required>
+   </div>
+   <div class="form-group">
+    <label for="startDate_${price.id}">Start Date:</label>
+    <input type="date" id="startDate_${price.id}" name="startDate" value="${price.startDate}" required>
+   </div>
+   <div class="form-group">
+    <label for="endDate_${price.id}">End Date:</label>
+    <input type="date" id="endDate_${price.id}" name="endDate" value="${price.endDate}" required>
+   </div>
+  </c:forEach>
+  <button class="btn" type="submit">Save <i class='far fa-arrow-alt-circle-right'></i></button>
  </form>
 </div>
 </body>

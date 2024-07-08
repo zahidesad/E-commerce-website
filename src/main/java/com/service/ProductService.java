@@ -7,6 +7,7 @@ import com.repository.CategoryRepository;
 import com.repository.PriceRepository;
 import com.repository.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,27 @@ public class ProductService {
         priceRepository.save(productPrice);
     }
 
-
+    @Transactional
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        products.forEach(product -> {
+            Hibernate.initialize(product.getCategories());
+            Hibernate.initialize(product.getPrices());
+        });
+        return products;
     }
 
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
+    }
+
+    public List<Price> getPricesByProductId(Long productId) {
+        return priceRepository.findByProductId(productId);
+    }
+
+    @Transactional
+    public void updateProduct(Product product) {
+        productRepository.save(product);
     }
 
     public void deleteProductById(Long id) {
@@ -60,10 +75,6 @@ public class ProductService {
 
     public List<Product> getProductsByCategory(Long categoryId) {
         return productRepository.findByCategoryId(categoryId);
-    }
-
-    public void updateProduct(Product product) {
-        productRepository.save(product);
     }
 
     public List<Product> searchProducts(String query) {

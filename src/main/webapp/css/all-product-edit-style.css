@@ -4,7 +4,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1980px;
     margin: 40px auto;
     background-color: white;
     padding: 20px;
@@ -84,4 +84,31 @@ a:hover {
 
 .btn-edit:hover {
     background-color: #3fa1f4;
+}
+
+.btn-add-price {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block; /* Butonun genişlemesini sağlar */
+    text-align: center; /* Metni ortalar */
+    white-space: normal; /* Metnin taşmasını önler */
+}
+
+.btn-add-price:hover {
+    background-color: #45a049;
+}
+
+.table-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+td.actions {
+    width: 180px;
+    white-space: nowrap;
 }

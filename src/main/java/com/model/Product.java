@@ -1,7 +1,13 @@
 package com.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "product")
@@ -17,14 +23,13 @@ public class Product {
     @Column(name = "active")
     private String active;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems;
+    private List<CartItem> cartItems = new ArrayList<>();
 
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -78,5 +83,23 @@ public class Product {
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public String getCategoryNames() {
+        return categories.stream().map(Category::getName).collect(Collectors.joining(", "));
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return prices.stream().filter(p -> p.getEndDate() == null || p.getEndDate().after(new Date())).findFirst().map(Price::getPrice).orElse(null);
+    }
+
+    // Helper method to check if a category is in the product's categories
+    public boolean hasCategory(Long categoryId) {
+        for (Category category : this.categories) {
+            if (category.getId().equals(categoryId)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

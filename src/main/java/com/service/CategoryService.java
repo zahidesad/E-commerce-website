@@ -33,4 +33,8 @@ public class CategoryService {
         parentCategory.getChildCategories().add(childCategory);
         categoryRepository.save(parentCategory);
     }
+
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
+    }
 }
