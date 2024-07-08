@@ -31,8 +31,21 @@
             <tr>
                 <td>${product.id}</td>
                 <td>${product.name}</td>
-                <td>${product.category}</td>
-                <td><i class="fa fa-inr"></i> ${product.price}</td>
+                <td>
+                    <c:forEach var="category" items="${product.categories}">
+                        ${category.name}<br/>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${not empty product.currentPrices}">
+                            <i class="fa fa-inr"></i> ${product.currentPrices[0].price}
+                        </c:when>
+                        <c:otherwise>
+                            No price available
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td>
                     <form action="${pageContext.request.contextPath}/addToCart" method="post">
                         <input type="hidden" name="productId" value="${product.id}">

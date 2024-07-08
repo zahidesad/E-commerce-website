@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -79,5 +80,13 @@ public class ProductService {
 
     public List<Product> searchProducts(String query) {
         return productRepository.findByNameContainingIgnoreCase(query);
+    }
+
+
+        private List<Price> getCurrentPrices(List<Price> prices) {
+        Date currentDate = new Date();
+        return prices.stream()
+                .filter(price -> !price.getStartDate().after(currentDate) && (price.getEndDate() == null || !price.getEndDate().before(currentDate)))
+                .collect(Collectors.toList());
     }
 }

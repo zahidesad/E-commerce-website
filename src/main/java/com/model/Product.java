@@ -102,4 +102,11 @@ public class Product {
         }
         return false;
     }
+
+    public List<Price> getCurrentPrices() {
+        Date currentDate = new Date();
+        return prices.stream()
+                .filter(price -> !price.getStartDate().after(currentDate) && (price.getEndDate() == null || !price.getEndDate().before(currentDate)))
+                .collect(Collectors.toList());
+    }
 }
