@@ -6,16 +6,13 @@ import com.model.Product;
 import com.repository.CategoryRepository;
 import com.repository.PriceRepository;
 import com.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +53,16 @@ public class ProductService {
         return products;
     }
 
+    @Transactional
     public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+        Optional<Product> product = productRepository.findById(id);
+        product.ifPresent(p -> {
+            Hibernate.initialize(p.getCategories());
+            Hibernate.initialize(p.getPrices());
+        });
+        return product;
     }
+
 
     public List<Price> getPricesByProductId(Long productId) {
         return priceRepository.findByProductId(productId);
@@ -74,12 +78,23 @@ public class ProductService {
         productRepository.deleteById(id); // Then, delete product
     }
 
-    public List<Product> getProductsByCategory(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId);
-    }
-
     public List<Product> searchProducts(String query) {
         return productRepository.findByNameContainingIgnoreCase(query);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> getProductsByCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category != null) {
+            Hibernate.initialize(category.getProducts());
+            Set<Product> products = new HashSet<>(category.getProducts());
+            for (Category childCategory : category.getChildCategories()) {
+                Hibernate.initialize(childCategory.getProducts());
+                products.addAll(childCategory.getProducts());
+            }
+            return products.stream().distinct().collect(Collectors.toList());
+        }
+        return List.of();
     }
 
 
@@ -89,4 +104,5 @@ public class ProductService {
                 .filter(price -> !price.getStartDate().after(currentDate) && (price.getEndDate() == null || !price.getEndDate().before(currentDate)))
                 .collect(Collectors.toList());
     }
+
 }

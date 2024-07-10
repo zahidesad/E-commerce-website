@@ -22,15 +22,18 @@
    <label for="category">Category:</label>
    <select id="category" name="categoryId" required>
     <c:forEach var="category" items="${categories}">
-     <option value="${category.id}" <c:if test="${category.id == product.categories[0].id}">selected</c:if>>${category.name}</option>
+     <option value="${category.id}"
+             <c:if test="${not empty product.categories && product.categories.size() > 0 && category.id == product.categories[0].id}">selected</c:if>>
+       ${category.name}
+     </option>
     </c:forEach>
    </select>
   </div>
   <div class="form-group">
    <label for="active">Active:</label>
    <select id="active" name="active">
-    <option value="Yes" ${product.active == 'Yes' ? 'selected' : ''}>Yes</option>
-    <option value="No" ${product.active == 'No' ? 'selected' : ''}>No</option>
+    <option value="Yes" <c:if test="${product.active == 'Yes'}">selected</c:if>>Yes</option>
+    <option value="No" <c:if test="${product.active == 'No'}">selected</c:if>>No</option>
    </select>
   </div>
   <h3>Current Prices:</h3>

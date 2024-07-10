@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.model.Product;
+import com.service.CategoryService;
 import com.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,6 +19,10 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
+
+
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product,
@@ -51,7 +56,7 @@ public class ProductController {
 
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
+        List<Product> products = categoryService.getProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
     }
 

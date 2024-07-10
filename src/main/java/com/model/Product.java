@@ -29,7 +29,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -85,22 +85,8 @@ public class Product {
         this.cartItems = cartItems;
     }
 
-    public String getCategoryNames() {
-        return categories.stream().map(Category::getName).collect(Collectors.joining(", "));
-    }
-
     public BigDecimal getCurrentPrice() {
         return prices.stream().filter(p -> p.getEndDate() == null || p.getEndDate().after(new Date())).findFirst().map(Price::getPrice).orElse(null);
-    }
-
-    // Helper method to check if a category is in the product's categories
-    public boolean hasCategory(Long categoryId) {
-        for (Category category : this.categories) {
-            if (category.getId().equals(categoryId)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public List<Price> getCurrentPrices() {
@@ -108,5 +94,13 @@ public class Product {
         return prices.stream()
                 .filter(price -> !price.getStartDate().after(currentDate) && (price.getEndDate() == null || !price.getEndDate().before(currentDate)))
                 .collect(Collectors.toList());
+    }
+
+    public BigDecimal getCurrentPriceValue() {
+        List<Price> currentPrices = getCurrentPrices();
+        if (!currentPrices.isEmpty()) {
+            return currentPrices.get(0).getPrice();
+        }
+        return null;
     }
 }

@@ -76,7 +76,7 @@ public class AdminController {
             model.addAttribute("categories", categoryService.getAllCategories());
             return "editProduct";
         }
-        return "redirect:/allProductEditProduct";
+            return "redirect:/allProductEditProduct";
     }
 
 

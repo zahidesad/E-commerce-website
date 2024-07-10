@@ -16,7 +16,7 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "category_relationship",
             joinColumns = @JoinColumn(name = "parent_category_id"),
@@ -24,7 +24,7 @@ public class Category {
     )
     private Set<Category> childCategories = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "category_relationship",
             joinColumns = @JoinColumn(name = "child_category_id"),
