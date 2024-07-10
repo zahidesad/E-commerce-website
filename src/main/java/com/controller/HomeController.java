@@ -49,18 +49,4 @@ public class HomeController {
         return "home";
     }
 
-
-    @GetMapping("/categoryProducts")
-    public String categoryProducts(@RequestParam("categoryId") Long categoryId, Model model) {
-        List<Product> products = categoryService.getProductsByCategory(categoryId);
-        model.addAttribute("products", products);
-        return "categoryProducts";
-    }
-
-    @GetMapping("/productDetails")
-    public String productDetails(@RequestParam("id") Long productId, Model model) {
-        Optional<Product> product = productService.getProductById(productId);
-        product.ifPresent(value -> model.addAttribute("product", value));
-        return "productDetails";
-    }
 }

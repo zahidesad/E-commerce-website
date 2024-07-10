@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <h2>Add New Category <i class="fas fa-plus-circle"></i></h2>
-    <form action="${pageContext.request.contextPath}/addCategory" method="post">
+    <form action="${pageContext.request.contextPath}/category/addCategory" method="post">
         <div class="form-group">
             <label for="name">Category Name:</label>
             <input type="text" id="name" name="name" required>

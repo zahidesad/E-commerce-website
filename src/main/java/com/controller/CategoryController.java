@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -37,13 +39,24 @@ public class CategoryController {
     @PostMapping("/addCategory")
     public String addCategory(@RequestParam("name") String name) {
         categoryService.addCategory(name);
-        return "redirect:/addCategory";
+        return "redirect:/category/addCategory";
     }
 
     @GetMapping("/categoryProducts")
     public String categoryProducts(@RequestParam("categoryId") Long categoryId, Model model) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
+        List<Category> parentCategories = categoryService.getParentCategories();
+        List<Category> childCategories = categoryService.getChildCategories();
+        List<Product> products = categoryService.getProductsByCategory(categoryId);
+
+        Map<Long, Integer> categoryProductCounts = new HashMap<>();
+        for (Category category : parentCategories) {
+            categoryProductCounts.put(category.getId(), categoryService.getCategoryProductCount(category));
+        }
+
+        model.addAttribute("parentCategories", parentCategories);
+        model.addAttribute("childCategories", childCategories);
         model.addAttribute("products", products);
+        model.addAttribute("categoryProductCounts", categoryProductCounts);
         return "categoryProducts";
     }
 

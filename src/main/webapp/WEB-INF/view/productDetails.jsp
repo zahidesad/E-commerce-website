@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <img src="${pageContext.request.contextPath}/images/dummyimg.png" alt="${product.name}">
+            <img src="${pageContext.request.contextPath}/images/Iphone14Pro.jpg" alt="${product.name}">
         </div>
         <div class="col-md-6">
             <h2>${product.name}</h2>

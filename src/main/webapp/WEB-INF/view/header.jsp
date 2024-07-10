@@ -11,6 +11,8 @@
             justify-content: center;
             align-items: center;
             background-color: #333;
+            margin: 0;
+            padding: 0;
         }
         .topnav a {
             padding: 14px 16px;
@@ -49,7 +51,6 @@
 </head>
 <body>
 <!--Header-->
-<br>
 <div class="topnav sticky">
     <%
         String email = (String) session.getAttribute("email").toString();
@@ -79,7 +80,6 @@
         }
     %>
 </div>
-<br>
 <!--table-->
 </body>
 </html>
