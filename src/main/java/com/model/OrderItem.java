@@ -7,20 +7,27 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "order_item")
 public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity;
-    private BigDecimal price;
-    private BigDecimal total;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "total")
+    private BigDecimal total;
 
     public Long getId() {
         return id;
@@ -28,6 +35,22 @@ public class OrderItem {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -52,21 +75,5 @@ public class OrderItem {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }

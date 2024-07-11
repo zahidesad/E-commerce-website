@@ -1,29 +1,37 @@
 package com.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "order_date")
     private Date orderDate;
+
+    @Column(name = "delivery_date")
     private Date deliveryDate;
+
+    @Column(name = "payment_method")
     private String paymentMethod;
+
+    @Column(name = "transaction_id")
     private String transactionId;
+
+    @Column(name = "status")
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "order")
-    private Set<OrderItem> orderItems = new HashSet<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
 
     public Long getId() {
         return id;
@@ -31,6 +39,14 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Date getOrderDate() {
@@ -73,19 +89,11 @@ public class Order {
         this.status = status;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<OrderItem> getOrderItems() {
+    public List<OrderItem> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(Set<OrderItem> orderItems) {
+    public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
 }

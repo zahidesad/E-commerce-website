@@ -1,6 +1,8 @@
 package com.controller;
 
+import com.model.Address;
 import com.model.Cart;
+import com.service.AddressService;
 import com.service.CartService;
 import com.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class CartController {
 
@@ -18,7 +22,7 @@ public class CartController {
     private CartService cartService;
 
     @Autowired
-    private ProductService productService;
+    private AddressService addressService;
 
     @GetMapping("/myCart")
     public String viewCart(HttpSession session, Model model) {
@@ -61,4 +65,20 @@ public class CartController {
         System.out.println("Product removed from cart successfully.");
         return "redirect:/myCart";
     }
+
+    @GetMapping("/proceedToOrder")
+    public String proceedToOrder(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        List<Address> addresses = addressService.getAddressesByUserId(userId);
+        if (addresses == null || addresses.isEmpty()) {
+            return "redirect:/myAddress";
+        } else {
+            return "redirect:/myOrderDetails";
+        }
+    }
+
 }

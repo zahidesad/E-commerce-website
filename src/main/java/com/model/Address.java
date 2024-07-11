@@ -5,15 +5,22 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "address")
 public class Address {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "state")
+    private String state;
 
     public Long getId() {
         return id;
@@ -23,12 +30,12 @@ public class Address {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getAddress() {
@@ -63,8 +70,7 @@ public class Address {
         this.country = country;
     }
 
-    private String city;
-    private String state;
+    @Column(name = "country")
     private String country;
 
 
