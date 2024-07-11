@@ -51,7 +51,14 @@
             <c:forEach var="product" items="${products}">
                 <div class="col-md-4">
                     <div class="product-card">
-                        <img src="${pageContext.request.contextPath}/images/Iphone14Pro.jpg" alt="${product.name}" class="product-image">
+                        <c:choose>
+                            <c:when test="${product.photoData != null}">
+                                <img src="${pageContext.request.contextPath}/productImage?id=${product.id}" alt="${product.name}" class="product-image">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/images/DefaultImage.jpg" alt="${product.name}" class="product-image">
+                            </c:otherwise>
+                        </c:choose>
                         <h4 class="product-name">${product.name}</h4>
                         <p class="product-price">Price:
                             <c:choose>

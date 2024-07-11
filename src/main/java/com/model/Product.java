@@ -23,6 +23,13 @@ public class Product {
     @Column(name = "active")
     private String active;
 
+    @Lob
+    @Column(name = "photo_data")
+    private byte[] photoData;
+
+    @Column(name = "photo_name")
+    private String photoName;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices;
 
@@ -36,6 +43,10 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories;
+
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stock> stocks = new ArrayList<>();
 
     public List<Category> getCategories() {
         return categories;
@@ -67,6 +78,22 @@ public class Product {
 
     public void setActive(String active) {
         this.active = active;
+    }
+
+    public byte[] getPhotoData() {
+        return photoData;
+    }
+
+    public void setPhotoData(byte[] photoData) {
+        this.photoData = photoData;
+    }
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 
     public List<Price> getPrices() {
@@ -102,5 +129,17 @@ public class Product {
             return currentPrices.get(0).getPrice();
         }
         return null;
+    }
+
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
+    }
+
+    public int getStockQuantity() {
+        return stocks.stream().mapToInt(Stock::getQuantity).sum();
     }
 }

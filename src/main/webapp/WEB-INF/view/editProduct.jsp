@@ -36,6 +36,10 @@
     <option value="No" <c:if test="${product.active == 'No'}">selected</c:if>>No</option>
    </select>
   </div>
+  <div class="form-group">
+   <label for="quantity">Quantity:</label>
+   <input type="number" id="quantity" name="quantity" value="${product.stocks[0].quantity}" required>
+  </div>
   <h3>Current Prices:</h3>
   <c:forEach var="price" items="${product.prices}">
    <input type="hidden" name="priceId" value="${price.id}">

@@ -4,6 +4,7 @@ import com.model.CartItem;
 import com.model.Category;
 import com.model.Price;
 import com.model.Product;
+import com.repository.PriceRepository;
 import com.service.CategoryService;
 import com.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -15,9 +16,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -27,6 +35,9 @@ public class AdminController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private PriceRepository priceRepository;
 
     @GetMapping("/adminHome")
     public String adminHomePage(HttpSession session, Model model) {
@@ -49,12 +60,32 @@ public class AdminController {
     @PostMapping("/addNewProduct")
     public String addNewProduct(@ModelAttribute("product") Product product,
                                 @RequestParam("price") BigDecimal price,
+                                @RequestParam("quantity") int quantity,
                                 @RequestParam("category") List<Long> categoryIds,
                                 @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-                                @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        productService.saveProduct(product, price, startDate, endDate, categoryIds);
+                                @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+                                @RequestParam("photo") MultipartFile photo) {
+        // Fotoğrafı işleme
+        if (!photo.isEmpty()) {
+            try {
+                byte[] bytes = photo.getBytes();
+                String photoName = photo.getOriginalFilename();
+
+                String uploadDir = "C:/Users/zahid/IdeaProjects/E-commerce-website/src/main/webapp/images";
+
+                Path path = Paths.get(uploadDir + File.separator + photoName);
+                Files.write(path, bytes);
+
+                product.setPhotoName(photoName);
+                product.setPhotoData(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        productService.saveProduct(product, price, quantity, startDate, endDate, categoryIds);
         return "redirect:/allProductEditProduct";
     }
+
 
 
     @GetMapping("/allProductEditProduct")
@@ -74,6 +105,7 @@ public class AdminController {
         if (product.isPresent()) {
             model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
+
             return "editProduct";
         }
             return "redirect:/allProductEditProduct";
@@ -84,69 +116,12 @@ public class AdminController {
     public String updateProduct(@ModelAttribute("product") Product product,
                                 @RequestParam("categoryId") Long categoryId,
                                 @RequestParam("active") String active,
+                                @RequestParam("quantity") int quantity,
                                 @RequestParam("priceId") List<Long> priceIds,
                                 @RequestParam("priceAmount") List<BigDecimal> priceAmounts,
                                 @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<Date> startDates,
                                 @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<Date> endDates) {
-
-        // Update category
-        Optional<Category> category = categoryService.getCategoryById(categoryId);
-        category.ifPresent(value -> product.setCategories(List.of(value)));
-
-        // Update active status
-        product.setActive(active);
-
-        // Load existing prices
-        List<Price> existingPrices = productService.getPricesByProductId(product.getId());
-        if (existingPrices == null) {
-            existingPrices = new ArrayList<>();
-        }
-        product.setPrices(existingPrices);
-
-        // Track updated prices
-        List<Long> updatedPriceIds = new ArrayList<>();
-
-        // Update existing prices and add new ones
-        for (int i = 0; i < priceIds.size(); i++) {
-            Long priceId = priceIds.get(i);
-            boolean priceFound = false;
-
-            for (Price price : existingPrices) {
-                if (price.getId().equals(priceId)) {
-                    price.setPrice(priceAmounts.get(i));
-                    price.setStartDate(startDates.get(i));
-                    price.setEndDate(endDates.get(i));
-                    updatedPriceIds.add(priceId);
-                    priceFound = true;
-                    break;
-                }
-            }
-
-            // If price not found, it's a new price
-            if (!priceFound) {
-                Price newPrice = new Price();
-                newPrice.setPrice(priceAmounts.get(i));
-                newPrice.setStartDate(startDates.get(i));
-                newPrice.setEndDate(endDates.get(i));
-                newPrice.setProduct(product);
-                existingPrices.add(newPrice);
-            }
-        }
-        // Remove prices that are no longer present
-        existingPrices.removeIf(price -> !updatedPriceIds.contains(price.getId()));
-
-        // Ensure cartItems list is not null
-        if (product.getCartItems() == null) {
-            product.setCartItems(new ArrayList<>());
-        }
-
-        // Debug log for checking prices
-        for (Price price : product.getPrices()) {
-            System.out.println("Price ID: " + price.getId() + ", Amount: " + price.getPrice() +
-                    ", Start Date: " + price.getStartDate() + ", End Date: " + price.getEndDate());
-        }
-
-        productService.updateProduct(product);
+        productService.updateProduct(product, categoryId, active, quantity, priceIds, priceAmounts, startDates, endDates);
         return "redirect:/allProductEditProduct";
     }
 
@@ -174,13 +149,27 @@ public class AdminController {
                               @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
+            Product existingProduct = product.get();
             Price newPrice = new Price();
-            newPrice.setProduct(product.get());
+            newPrice.setProduct(existingProduct);
             newPrice.setPrice(price);
             newPrice.setStartDate(startDate);
             newPrice.setEndDate(endDate);
-            product.get().getPrices().add(newPrice);
-            productService.updateProduct(product.get());
+
+            // Save the new price first to generate the ID
+            priceRepository.save(newPrice);
+
+            existingProduct.getPrices().add(newPrice);
+
+            // Save the product after the new price has been saved
+            productService.updateProduct(existingProduct,
+                    existingProduct.getCategories().get(0).getId(),
+                    existingProduct.getActive(),
+                    existingProduct.getStocks().get(0).getQuantity(),
+                    existingProduct.getPrices().stream().map(Price::getId).collect(Collectors.toList()),
+                    existingProduct.getPrices().stream().map(Price::getPrice).collect(Collectors.toList()),
+                    existingProduct.getPrices().stream().map(Price::getStartDate).collect(Collectors.toList()),
+                    existingProduct.getPrices().stream().map(Price::getEndDate).collect(Collectors.toList()));
         }
         return "redirect:/allProductEditProduct";
     }

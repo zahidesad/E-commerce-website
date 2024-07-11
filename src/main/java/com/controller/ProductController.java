@@ -19,21 +19,21 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
     @Autowired
     private CategoryService categoryService;
-
 
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product,
                                                  @RequestParam BigDecimal price,
+                                                 @RequestParam int quantity,
                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
                                                  @RequestParam List<Long> categoryIds) {
-        productService.saveProduct(product, price, startDate, endDate, categoryIds);
+        productService.saveProduct(product, price, quantity, startDate, endDate, categoryIds);
         return ResponseEntity.ok(product);
     }
-
 
 
     @GetMapping

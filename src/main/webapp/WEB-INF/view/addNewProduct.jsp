@@ -11,7 +11,7 @@
 <body>
 <div class="container">
  <h2>Add New Product <i class="fas fa-plus-circle"></i></h2>
- <form action="${pageContext.request.contextPath}/addNewProduct" method="post">
+ <form action="${pageContext.request.contextPath}/addNewProduct" method="post" enctype="multipart/form-data">
   <div class="form-group">
    <label for="name">Name:</label>
    <input type="text" id="name" name="name" required>
@@ -29,6 +29,10 @@
    <input type="number" id="price" name="price" required>
   </div>
   <div class="form-group">
+   <label for="quantity">Quantity:</label>
+   <input type="number" id="quantity" name="quantity" required>
+  </div>
+  <div class="form-group">
    <label for="startDate">Start Date:</label>
    <input type="date" id="startDate" name="startDate" required>
   </div>
@@ -42,6 +46,10 @@
     <option value="Yes">Yes</option>
     <option value="No">No</option>
    </select>
+  </div>
+  <div class="form-group">
+   <label for="photo">Photo:</label>
+   <input type="file" id="photo" name="photo">
   </div>
   <button type="submit" class="btn">Add Product</button>
  </form>
