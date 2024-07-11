@@ -1,8 +1,10 @@
 package com.security;
 
+import com.model.User;
+import com.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,18 @@ import java.util.Set;
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
         String email = getEmailFromAuthentication(authentication);
         request.getSession().setAttribute("email", email);
+
+        User user = userService.findUserByEmail(email);
+        request.getSession().setAttribute("userId", user.getId());
 
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect(request.getContextPath() + "/adminHome");

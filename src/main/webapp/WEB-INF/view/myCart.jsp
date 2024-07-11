@@ -39,10 +39,10 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="cartItem" items="${cartItems}" varStatus="status">
+            <c:forEach var="cartItem" items="${cart.cartItems}" varStatus="status">
                 <tr>
                     <td>${status.index + 1}</td>
-                    <td>${cartItem.productName}</td>
+                    <td>${cartItem.product.name}</td>
                     <td>
                         <form action="${pageContext.request.contextPath}/incDecQuantity" method="get" style="display:inline;">
                             <input type="hidden" name="id" value="${cartItem.id}">

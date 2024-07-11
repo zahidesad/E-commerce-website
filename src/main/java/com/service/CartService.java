@@ -3,6 +3,7 @@ package com.service;
 import com.model.Cart;
 import com.model.CartItem;
 import com.model.Product;
+import com.model.User;
 import com.repository.CartItemRepository;
 import com.repository.CartRepository;
 import com.repository.ProductRepository;
@@ -12,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -31,10 +30,11 @@ public class CartService {
     @Autowired
     private PriceRepository priceRepository;
 
+    @Transactional
     public Cart getOrCreateCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId).orElseGet(() -> {
             Cart cart = new Cart();
-            cart.getUser().setId(userId);
+            cart.setUser(new User(userId));
             return cartRepository.save(cart);
         });
     }
@@ -60,7 +60,6 @@ public class CartService {
         }
     }
 
-
     public void updateCartItemQuantity(Long cartItemId, String action) {
         Optional<CartItem> cartItemOpt = cartItemRepository.findById(cartItemId);
         if (cartItemOpt.isPresent()) {
@@ -80,7 +79,9 @@ public class CartService {
     }
 
     public void removeFromCart(Long cartItemId) {
+        System.out.println("removeFromCart service method called with id: " + cartItemId);
         cartItemRepository.deleteById(cartItemId);
+        System.out.println("Product removed from cart in service.");
     }
 
     public void clearCartByUserId(Long userId) {

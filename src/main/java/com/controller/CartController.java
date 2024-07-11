@@ -1,9 +1,9 @@
 package com.controller;
 
 import com.model.Cart;
-import com.model.Product;
 import com.service.CartService;
 import com.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
-
 @Controller
 public class CartController {
+
     @Autowired
     private CartService cartService;
 
@@ -59,7 +56,9 @@ public class CartController {
 
     @GetMapping("/removeFromCart")
     public String removeFromCart(@RequestParam("id") Long id) {
+        System.out.println("removeFromCart method called with id: " + id);
         cartService.removeFromCart(id);
+        System.out.println("Product removed from cart successfully.");
         return "redirect:/myCart";
     }
 }

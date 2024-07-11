@@ -22,6 +22,8 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/register"),
                                 new AntPathRequestMatcher("/forgotPassword"),
                                 new AntPathRequestMatcher("/api/products/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/addToCart"),
+                                new AntPathRequestMatcher("/myCart")).authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -43,4 +45,3 @@ public class WebSecurityConfig {
     }
 
 }
-
