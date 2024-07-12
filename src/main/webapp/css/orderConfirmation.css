@@ -19,38 +19,7 @@ body {
     text-align: center;
 }
 
-.address-item, .payment-methods {
-    margin-bottom: 15px;
-}
-
-.address-item input[type="radio"], .payment-methods input[type="radio"] {
-    margin-right: 10px;
-}
-
-.order-summary {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.order-summary th, .order-summary td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.total-container {
-    text-align: right;
-    margin-top: 20px;
-}
-
-.total-price {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-}
-
-.btn-complete-order {
+.btn-home {
     display: block;
     width: 100%;
     background-color: #4CAF50;
@@ -61,14 +30,13 @@ body {
     cursor: pointer;
     font-size: 1em;
     text-align: center;
-    margin-top: 20px;
 }
 
-.btn-complete-order:hover {
+.btn-home:hover {
     background-color: #45a049;
 }
 
-/*footer*/
+/* footer */
 .footer {
     position: fixed;
     left: 0;

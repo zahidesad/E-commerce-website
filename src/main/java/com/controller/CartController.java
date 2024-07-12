@@ -2,6 +2,7 @@ package com.controller;
 
 import com.model.Address;
 import com.model.Cart;
+import com.model.CartItem;
 import com.service.AddressService;
 import com.service.CartService;
 import com.service.ProductService;
@@ -67,7 +68,7 @@ public class CartController {
     }
 
     @GetMapping("/proceedToOrder")
-    public String proceedToOrder(HttpSession session) {
+    public String proceedToOrder(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
@@ -77,8 +78,17 @@ public class CartController {
         if (addresses == null || addresses.isEmpty()) {
             return "redirect:/myAddress";
         } else {
-            return "redirect:/myOrderDetails";
+            Cart cart = cartService.getOrCreateCartByUserId(userId);
+            List<CartItem> cartItems = cart.getCartItems();
+            double total = cartItems.stream().mapToDouble(item -> item.getTotal().doubleValue()).sum();
+
+            model.addAttribute("addresses", addresses);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("total", total);
+
+            return "orderDetails";
         }
     }
+
 
 }

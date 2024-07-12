@@ -1,6 +1,8 @@
 package com.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +32,15 @@ public class Order {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "address_id")
+    private Long addressId;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
+
+    @Transient
+    private BigDecimal total;
+
 
     public Long getId() {
         return id;
@@ -89,11 +98,33 @@ public class Order {
         this.status = status;
     }
 
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
     public List<OrderItem> getOrderItems() {
         return orderItems;
     }
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public BigDecimal getTotal() {
+        if (orderItems != null) {
+            BigDecimal total = orderItems.stream()
+                    .map(OrderItem::getTotal)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            return total;
+        }
+        return BigDecimal.ZERO;
+    }
+
+    private void calculateTotal() {
+        this.total= getTotal();
     }
 }

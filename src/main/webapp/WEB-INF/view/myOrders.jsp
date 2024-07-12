@@ -1,47 +1,47 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="header.jsp" %>
+<%@ include file="footer.jsp" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Home</title>
+    <meta charset="ISO-8859-1">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myOrder.css">
 </head>
 <body>
-<div style="color: white; text-align: center; font-size: 30px;">My Orders <i class='fab fa-elementor'></i></div>
-<table>
-        <thead>
-          <tr>
-            <th scope="col">S.No</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">category</th>
-            <th scope="col"><i class="fa fa-inr"></i>  Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col"><i class="fa fa-inr"></i> Sub Total</th>
-            <th scope="col">Order Date</th>
-             <th scope="col">Expected Delivery Date</th>
-             <th scope="col">Payment Method</th>
-              <th scope="col">Status</th>
-              
-          </tr>
-        </thead>
-        <tbody>
+<div class="container">
+    <div class="content-header">My Orders</div>
 
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><i class="fa fa-inr"></i> </td>
-            <td></td>
-            <td><i class="fa fa-inr"></i> </td>
-             <td></td>
-              <td></td>
-               <td></td>
-               <td></td>
+    <c:if test="${orders != null && !orders.isEmpty()}">
+        <table class="order-table">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Delivery Date</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Details</th>
             </tr>
-         
-        </tbody>
-      </table>
-      <br>
-      <br>
-      <br>
-
+            </thead>
+            <tbody>
+            <c:forEach var="order" items="${orders}">
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.orderDate}</td>
+                    <td>${order.deliveryDate}</td>
+                    <td>${order.status}</td>
+                    <td>${order.total}</td>
+                    <td><a href="">View Details</a></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
+    <c:if test="${orders == null || orders.isEmpty()}">
+        <p>You have no orders.</p>
+    </c:if>
+</div>
 </body>
 </html>

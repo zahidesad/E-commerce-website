@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
+
     @Transactional
     void deleteByCartId(Long cartId);
+
     Optional<CartItem> findByCartIdAndProductId(Long cartId, Long productId);
 
     @Modifying

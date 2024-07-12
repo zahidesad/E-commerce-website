@@ -29,6 +29,7 @@ public class OrderItem {
     @Column(name = "total")
     private BigDecimal total;
 
+
     public Long getId() {
         return id;
     }
@@ -76,4 +77,11 @@ public class OrderItem {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
+
+    @PrePersist
+    @PreUpdate
+    public void calculateTotal() {
+        this.total = this.price.multiply(BigDecimal.valueOf(this.quantity));
+    }
+
 }

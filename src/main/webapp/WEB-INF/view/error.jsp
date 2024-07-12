@@ -1,27 +1,28 @@
-<%@page isErrorPage="true" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
-<style>
-body
-{
- background-color: #0080FF;
-}
-h1
-{
-color: white;
-text-align: center;
-}
-a
-{
-color:white;}
-</style>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Error</title>
+    <meta charset="ISO-8859-1">
+    <title>Error Page</title>
 </head>
 <body>
-<h1>Something went Wrong!</h1>
-<h1>So go for login! Try again!</h1>
-<h1><a href="${pageContext.request.contextPath}/login">login</a></h1>
+<div class="container">
+    <h2>Error Page</h2>
+    <p>An unexpected error occurred. Please try again later.</p>
+    <c:if test="${not empty requestScope['jakarta.servlet.error.message']}">
+        <h3>Error Message:</h3>
+        <pre>${requestScope['jakarta.servlet.error.message']}</pre>
+    </c:if>
+    <c:if test="${not empty requestScope['jakarta.servlet.error.exception']}">
+        <h3>Exception:</h3>
+        <pre>${requestScope['jakarta.servlet.error.exception']}</pre>
+        <h4>Stack Trace:</h4>
+        <pre>
+                <c:forEach var="traceElement" items="${requestScope['jakarta.servlet.error.exception'].stackTrace}">
+                    ${traceElement}
+                </c:forEach>
+            </pre>
+    </c:if>
+</div>
 </body>
 </html>

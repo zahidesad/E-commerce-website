@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -84,10 +85,15 @@ public class CartService {
         System.out.println("Product removed from cart in service.");
     }
 
+    @Transactional
     public void clearCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElse(null);
         if (cart != null) {
-            cartItemRepository.deleteByCartId(cart.getId());
+            for (CartItem item : cart.getCartItems()) {
+                cartItemRepository.delete(item);
+            }
+            cart.getCartItems().clear();
+            cartRepository.save(cart);
         }
     }
 
