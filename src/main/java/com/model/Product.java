@@ -135,11 +135,20 @@ public class Product {
         return stocks;
     }
 
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
-    }
-
-    public int getStockQuantity() {
+    public int getStock() {
         return stocks.stream().mapToInt(Stock::getQuantity).sum();
     }
+
+    public void setStock(int quantity) {
+        if (stocks.isEmpty()) {
+            Stock stock = new Stock();
+            stock.setQuantity(quantity);
+            stock.setProduct(this);
+            stocks.add(stock);
+        } else {
+            Stock stock = stocks.get(0);
+            stock.setQuantity(quantity);
+        }
+    }
+
 }

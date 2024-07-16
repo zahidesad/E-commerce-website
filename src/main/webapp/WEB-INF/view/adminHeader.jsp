@@ -32,9 +32,7 @@
     <a href="${pageContext.request.contextPath}/addNewProduct">Add New Product <i class="fas fa-plus"></i></a>
     <a href="${pageContext.request.contextPath}/allProductEditProduct">All Products & Edit Products <i class="fas fa-edit"></i></a>
     <a href="${pageContext.request.contextPath}/category/addCategory">Add Category <i class="fas fa-plus"></i></a>
-    <a href="">Orders Received <i class="fas fa-box"></i></a>
-    <a href="">Cancel Orders <i class="fas fa-times"></i></a>
-    <a href="">Delivered Orders <i class="fas fa-truck"></i></a>
+    <a href="${pageContext.request.contextPath}/admin/orders">Orders <i class="fas fa-box"></i></a>
     <a href="${pageContext.request.contextPath}/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
 </div>
 <!--table-->

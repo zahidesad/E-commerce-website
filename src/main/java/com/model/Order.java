@@ -45,6 +45,10 @@ public class Order {
     @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private Address address;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
 
     public Long getId() {
         return id;
@@ -138,5 +142,13 @@ public class Order {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

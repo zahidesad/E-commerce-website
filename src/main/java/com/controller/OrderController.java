@@ -97,6 +97,26 @@ public class OrderController {
         return "viewDetails";
     }
 
+    @GetMapping("/admin/orders")
+    public String viewAllOrders(Model model) {
+        List<Order> orders = orderService.getAllOrders();
+        model.addAttribute("orders", orders);
+        return "adminOrders";
+    }
+
+    @GetMapping("/admin/orderDetails")
+    public String adminViewOrderDetails(@RequestParam("id") Long orderId, Model model) {
+        Order order = orderService.getOrderById(orderId);
+        model.addAttribute("order", order);
+        return "adminOrderDetails";
+    }
+
+    @PostMapping("/admin/updateOrderStatus")
+    public String updateOrderStatus(@RequestParam("orderId") Long orderId, @RequestParam("status") String status) {
+        orderService.updateOrderStatus(orderId, status);
+        return "redirect:/admin/orders";
+    }
+
 
 
 }
