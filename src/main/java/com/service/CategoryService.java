@@ -3,10 +3,11 @@ package com.service;
 import com.model.Category;
 import com.model.Product;
 import com.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,18 +36,47 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+
     @Transactional
     public void setCategoryRelationship(Long parentCategoryId, Long childCategoryId) {
-        Category parentCategory = categoryRepository.findById(parentCategoryId).orElseThrow();
-        Category childCategory = categoryRepository.findById(childCategoryId).orElseThrow();
-        parentCategory.getChildCategories().add(childCategory);
-        childCategory.getParentCategories().add(parentCategory);
-        categoryRepository.save(parentCategory);
-        categoryRepository.save(childCategory);
-    }
+        System.out.println("Attempting to add relationship: Parent ID = " + parentCategoryId + ", Child ID = " + childCategoryId);
 
-    public Optional<Category> getCategoryById(Long id) {
-        return categoryRepository.findById(id);
+        Optional<Category> parentCategoryOpt = categoryRepository.findById(parentCategoryId);
+        Optional<Category> childCategoryOpt = categoryRepository.findById(childCategoryId);
+
+        if (parentCategoryOpt.isPresent() && childCategoryOpt.isPresent()) {
+            Category parentCategory = parentCategoryOpt.get();
+            Category childCategory = childCategoryOpt.get();
+
+            System.out.println("Loaded Parent and Child Categories");
+            System.out.println("Parent Category ID: " + parentCategoryId + " Child Categories: " + parentCategory.getChildCategories().size());
+            System.out.println("Child Category ID: " + childCategoryId + " Parent Categories: " + childCategory.getParentCategories().size());
+
+            int existingRelationships = categoryRepository.checkCategoryRelationshipExists(parentCategoryId, childCategoryId);
+
+            if (existingRelationships == 0) {
+                categoryRepository.saveCategoryRelationship(parentCategoryId, childCategoryId);
+                System.out.println("Relationship added successfully.");
+            } else {
+                System.out.println("Relationship already exists: Parent ID = " + parentCategoryId + ", Child ID = " + childCategoryId);
+            }
+
+            // Debugging: İlişkileri kontrol et
+            parentCategory = categoryRepository.findById(parentCategoryId).get();
+            childCategory = categoryRepository.findById(childCategoryId).get();
+
+            System.out.println("After saving: ");
+            System.out.println("Parent Category ID: " + parentCategoryId + " has child categories: ");
+            for (Category child : parentCategory.getChildCategories()) {
+                System.out.println("Child Category ID: " + child.getId());
+            }
+            System.out.println("Child Category ID: " + childCategoryId + " has parent categories: ");
+            for (Category parent : childCategory.getParentCategories()) {
+                System.out.println("Parent Category ID: " + parent.getId());
+            }
+        } else {
+            System.out.println("Parent or Child Category not found.");
+        }
     }
 
     @Transactional()

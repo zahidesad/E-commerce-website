@@ -23,7 +23,9 @@ public class CategoryRelationshipController {
     @PostMapping("/manageCategoryRelationship")
     public String manageCategoryRelationships(@RequestParam("parentCategory") Long parentCategoryId,
                                               @RequestParam("childCategory") Long childCategoryId) {
+        System.out.println("Received request to add relationship: Parent ID = " + parentCategoryId + ", Child ID = " + childCategoryId);
         categoryService.setCategoryRelationship(parentCategoryId, childCategoryId);
+        System.out.println("Relationship added successfully.");
         return "redirect:/manageCategoryRelationships";
     }
 }

@@ -17,7 +17,7 @@
         </div>
         <div class="card">
             <h2>View Orders</h2>
-            <a href="">Go to Orders</a>
+            <a href="admin/orders">Go to Orders</a>
         </div>
         <div class="card">
             <h2>Manage Products</h2>
