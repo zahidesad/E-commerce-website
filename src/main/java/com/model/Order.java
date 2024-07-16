@@ -41,6 +41,10 @@ public class Order {
     @Transient
     private BigDecimal total;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id", insertable = false, updatable = false)
+    private Address address;
+
 
     public Long getId() {
         return id;
@@ -126,5 +130,13 @@ public class Order {
 
     private void calculateTotal() {
         this.total= getTotal();
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

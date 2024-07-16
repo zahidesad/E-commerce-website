@@ -33,7 +33,7 @@
                     <td>${order.deliveryDate}</td>
                     <td>${order.status}</td>
                     <td>${order.total}</td>
-                    <td><a href="">View Details</a></td>
+                    <td><a href="${pageContext.request.contextPath}/viewDetails?orderId=${order.id}">View Details</a></td>
                 </tr>
             </c:forEach>
             </tbody>

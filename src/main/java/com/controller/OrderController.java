@@ -84,5 +84,19 @@ public class OrderController {
         return "myOrders";
     }
 
+    @GetMapping("/viewDetails")
+    public String viewOrderDetails(@RequestParam("orderId") Long orderId, Model model) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            model.addAttribute("order", order);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "An error occurred while retrieving the order details.");
+            return "error";
+        }
+        return "viewDetails";
+    }
+
+
 
 }
