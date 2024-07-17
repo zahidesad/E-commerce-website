@@ -112,10 +112,6 @@ public class Product {
         this.cartItems = cartItems;
     }
 
-    public BigDecimal getCurrentPrice() {
-        return prices.stream().filter(p -> p.getEndDate() == null || p.getEndDate().after(new Date())).findFirst().map(Price::getPrice).orElse(null);
-    }
-
     public List<Price> getCurrentPrices() {
         Date currentDate = new Date();
         return prices.stream()

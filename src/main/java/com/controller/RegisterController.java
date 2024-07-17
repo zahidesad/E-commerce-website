@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.forms.RegisterForm;
-import com.model.Address;
 import com.model.User;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

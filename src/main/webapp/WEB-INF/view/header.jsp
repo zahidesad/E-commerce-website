@@ -62,8 +62,6 @@
     <a href="<c:url value='/myCart'/>">My Cart <i class='fas fa-cart-arrow-down'></i></a>
     <a href="<c:url value='/myOrders'/>">My Orders <i class='fab fa-elementor'></i></a>
     <a href="<c:url value='/myAddress'/>">My Address <i class="fa fa-address-book"></i></a>
-    <a href="">Message Us <i class='fas fa-comment-alt'></i></a>
-    <a href="">About <i class="fa fa-address-book"></i></a>
     <a href="<c:url value='/logout'/>">Logout <i class='fas fa-share-square'></i></a>
     <div class="search-container">
         <form action="<c:url value='/search'/>" method="get">

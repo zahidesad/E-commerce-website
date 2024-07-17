@@ -70,7 +70,6 @@
                                 </c:otherwise>
                             </c:choose>
                         </p>
-                        <a href="${pageContext.request.contextPath}/productDetails?id=${product.id}" class="btn btn-primary">See Details</a>
                         <form action="${pageContext.request.contextPath}/addToCart" method="post">
                             <input type="hidden" name="productId" value="${product.id}">
                             <input type="hidden" name="quantity" value="1">

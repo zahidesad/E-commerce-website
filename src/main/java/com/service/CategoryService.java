@@ -78,7 +78,6 @@ public class CategoryService {
             System.out.println("Parent or Child Category not found.");
         }
     }
-
     @Transactional()
     public List<Category> getParentCategories() {
         return getAllCategories().stream()

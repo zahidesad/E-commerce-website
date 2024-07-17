@@ -132,10 +132,6 @@ public class Order {
         return BigDecimal.ZERO;
     }
 
-    private void calculateTotal() {
-        this.total= getTotal();
-    }
-
     public Address getAddress() {
         return address;
     }

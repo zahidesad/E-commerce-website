@@ -1,6 +1,5 @@
 package com.controller;
 
-import com.model.CartItem;
 import com.model.Category;
 import com.model.Price;
 import com.model.Product;
@@ -65,7 +64,6 @@ public class AdminController {
                                 @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                 @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
                                 @RequestParam("photo") MultipartFile photo) {
-        // Fotoğrafı işleme
         if (!photo.isEmpty()) {
             try {
                 byte[] bytes = photo.getBytes();

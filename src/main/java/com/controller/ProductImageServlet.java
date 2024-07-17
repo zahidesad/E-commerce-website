@@ -31,7 +31,7 @@ public class ProductImageServlet extends HttpServlet {
             outputStream.write(product.get().getPhotoData());
             outputStream.close();
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 }

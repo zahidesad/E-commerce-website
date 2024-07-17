@@ -14,6 +14,9 @@ public class User {
     private String mobileNumber;
     private String securityQuestion;
     private String answer;
+    private String password;
+    private String role;
+    private boolean enabled;
 
     public User() {
     }
@@ -93,10 +96,6 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
-    private String password;
-    private String role;
-    private boolean enabled;
 
 
 }

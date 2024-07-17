@@ -1,12 +1,10 @@
 package com.controller;
 
 import com.model.Cart;
-import com.model.CartItem;
 import com.model.Order;
 import com.model.OrderItem;
 import com.service.CartService;
 import com.service.OrderService;
-import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,8 +25,6 @@ public class OrderController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/completeOrder")
     public String completeOrder(HttpSession session, @RequestParam("addressId") Long addressId,

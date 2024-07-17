@@ -39,7 +39,4 @@ public class Cart {
         return cartItems;
     }
 
-    public void setCartItems(List<CartItem> cartItems) {
-        this.cartItems = cartItems;
-    }
 }

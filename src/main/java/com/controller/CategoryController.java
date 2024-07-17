@@ -2,10 +2,7 @@ package com.controller;
 
 import com.model.Category;
 import com.model.Product;
-import com.repository.CategoryRepository;
 import com.service.CategoryService;
-import com.service.ProductService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Controller
@@ -27,9 +23,6 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private ProductService productService;
 
     @GetMapping("/addCategory")
     public String addCategoryPage(Model model) {
@@ -59,14 +52,5 @@ public class CategoryController {
         model.addAttribute("categoryProductCounts", categoryProductCounts);
         return "categoryProducts";
     }
-
-    @GetMapping("/productDetails")
-    public String productDetails(@RequestParam("id") Long productId, Model model) {
-        Optional<Product> product = productService.getProductById(productId);
-        product.ifPresent(value -> model.addAttribute("products", value));
-        return "productDetails";
-    }
-
-
 
 }
