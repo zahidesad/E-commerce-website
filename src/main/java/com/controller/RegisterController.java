@@ -25,6 +25,9 @@ public class RegisterController {
     public String register(RegisterForm registerForm, Model model) {
         User user = new User();
         user.setName(registerForm.getName());
+        user.setSurname(registerForm.getSurname());
+        user.setTcNumber(registerForm.getTcNumber());
+        user.setBirthYear(registerForm.getBirthYear());
         user.setEmail(registerForm.getEmail());
         user.setMobileNumber(registerForm.getMobileNumber());
         user.setSecurityQuestion(registerForm.getSecurityQuestion());

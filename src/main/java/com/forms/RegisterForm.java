@@ -2,6 +2,9 @@ package com.forms;
 
 public class RegisterForm {
     private String name;
+    private String surname;
+    private String tcNumber;
+    private int birthYear;
     private String email;
     private String mobileNumber;
     private String securityQuestion;
@@ -15,6 +18,30 @@ public class RegisterForm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getTcNumber() {
+        return tcNumber;
+    }
+
+    public void setTcNumber(String tcNumber) {
+        this.tcNumber = tcNumber;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 
     public String getEmail() {

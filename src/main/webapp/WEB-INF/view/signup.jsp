@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="css/signup-style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signup-style.css">
   <title>Signup</title>
 </head>
 <body>
@@ -11,6 +11,9 @@
   <div class='signup'>
     <form action="<c:url value='/register' />" method="post">
       <input type="text" name="name" placeholder="Enter Name" required>
+      <input type="text" name="surname" placeholder="Enter Surname" required>
+      <input type="text" name="tcNumber" placeholder="Enter TC Number" required>
+      <input type="number" name="birthYear" placeholder="Enter Birth Year" required>
       <input type="email" name="email" placeholder="Enter Email" required>
       <input type="number" name="mobileNumber" placeholder="Enter Mobile Number" required>
       <select name="securityQuestion" required>
@@ -35,6 +38,9 @@
       <c:when test="${msg == 'invalid'}">
         <h1>Something Went Wrong! Try Again!</h1>
       </c:when>
+      <c:otherwise>
+        <h1>Welcome to our Online Shopping System!</h1>
+      </c:otherwise>
     </c:choose>
     <h2>Online Shopping</h2>
     <p>The Online Shopping System allows users to shop online without visiting the stores.</p>
