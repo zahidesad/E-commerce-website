@@ -11,7 +11,7 @@ public class User {
 
     private String name;
     private String surname;
-    private String tcNumber;
+    private Long tcNumber;
     private int birthYear;
     private String email;
     private String mobileNumber;
@@ -48,9 +48,9 @@ public class User {
 
     public void setSurname(String surname) { this.surname = surname; }
 
-    public String getTcNumber() { return tcNumber; }
+    public Long getTcNumber() { return tcNumber; }
 
-    public void setTcNumber(String tcNumber) { this.tcNumber = tcNumber; }
+    public void setTcNumber(Long tcNumber) { this.tcNumber = tcNumber; }
 
     public int getBirthYear() { return birthYear; }
 

@@ -3,7 +3,7 @@ package com.forms;
 public class RegisterForm {
     private String name;
     private String surname;
-    private String tcNumber;
+    private Long tcNumber;
     private int birthYear;
     private String email;
     private String mobileNumber;
@@ -28,11 +28,11 @@ public class RegisterForm {
         this.surname = surname;
     }
 
-    public String getTcNumber() {
+    public Long getTcNumber() {
         return tcNumber;
     }
 
-    public void setTcNumber(String tcNumber) {
+    public void setTcNumber(Long tcNumber) {
         this.tcNumber = tcNumber;
     }
 

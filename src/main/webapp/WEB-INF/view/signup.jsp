@@ -38,6 +38,9 @@
       <c:when test="${msg == 'invalid'}">
         <h1>Something Went Wrong! Try Again!</h1>
       </c:when>
+      <c:when test="${msg == 'invalid_tc'}">
+        <h1>Invalid TC Information. Please Check Your Identity Information and Try Again!</h1>
+      </c:when>
       <c:otherwise>
         <h1>Welcome to our Online Shopping System!</h1>
       </c:otherwise>
