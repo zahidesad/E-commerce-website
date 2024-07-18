@@ -4,9 +4,9 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
-import tr.gov.nvi.tckimlik.ws.ObjectFactory;
-import tr.gov.nvi.tckimlik.ws.TCKimlikNoDogrula;
-import tr.gov.nvi.tckimlik.ws.TCKimlikNoDogrulaResponse;
+import com.tc.ObjectFactory;
+import com.tc.TCKimlikNoDogrula;
+import com.tc.TCKimlikNoDogrulaResponse;
 
 import jakarta.xml.soap.MessageFactory;
 
@@ -26,7 +26,8 @@ public class TCNumberVerificationService {
         marshaller.afterPropertiesSet();
 
         webServiceTemplate.setMarshaller(marshaller);
-        webServiceTemplate.setDefaultUri("http://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx");
+        webServiceTemplate.setDefaultUri("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
+        webServiceTemplate.setUnmarshaller(marshaller);
         webServiceTemplate.afterPropertiesSet();
     }
 
@@ -40,7 +41,7 @@ public class TCNumberVerificationService {
             request.setDogumYili(birthYear);
 
             TCKimlikNoDogrulaResponse response = (TCKimlikNoDogrulaResponse) webServiceTemplate
-                    .marshalSendAndReceive("http://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx", request);
+                    .marshalSendAndReceive(request);
 
             return response.isTCKimlikNoDogrulaResult();
         } catch (Exception e) {
