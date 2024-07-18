@@ -177,3 +177,98 @@ This is a comprehensive e-commerce website project developed as part of an inter
 5) Add to Cart: Users can add products to their cart and proceed to checkout.
 6) Admin Panel: Admin can manage products and categories.
 
+## Screens
+
+Note: This is a backend project, so I didn't pay much attention to the frontend part.
+
+### General Screens
+
+1) Login Screen
+   ![image](https://github.com/user-attachments/assets/516213c0-7d92-400a-b46c-3f31a06506f1)
+
+2) Register Screen
+   ![image](https://github.com/user-attachments/assets/ac8cd653-8f1a-456a-b901-5a2e2b47a969)
+
+3) Forgot Password Screen
+   ![image](https://github.com/user-attachments/assets/ebcfe302-3446-4c9b-b459-daf90d1acfe4)
+
+### User's Screens
+
+1) Home Screen
+   ![image](https://github.com/user-attachments/assets/1c364699-4501-49ac-a19a-0fdfcedb7e6e)
+
+2) Cart Screen
+   ![image](https://github.com/user-attachments/assets/64f7424e-ea8e-49f5-bda3-5889728756c7)
+
+3) Proceed To Order Screen (I blacked out the address part because it is my own address.)
+   <img width="1279" alt="image" src="https://github.com/user-attachments/assets/d65beb51-9f8f-4b31-948f-286ad6f0a2f3">
+
+4) My Orders Screen
+   ![image](https://github.com/user-attachments/assets/d5799492-24fe-4bf8-b69a-d3948c773413)
+
+5) My Order Details Screen (I blacked out the address part because it is my own address.)
+   <img width="1280" alt="image" src="https://github.com/user-attachments/assets/095f19cf-8c5c-4f47-a8c1-eadee3df644d">
+
+6) My Addresses Screen (I blacked out the address part because it is my own address.)
+   <img width="1279" alt="image" src="https://github.com/user-attachments/assets/f861e02d-6775-4f9e-a2a0-8064028cd051">
+
+7) Add New Address Screen
+   ![image](https://github.com/user-attachments/assets/3c92bd11-7c9a-48e1-9718-711c2fe7d321)
+
+8) Edit My Address Screen (I blacked out the address part because it is my own address.)
+   <img width="1279" alt="image" src="https://github.com/user-attachments/assets/7d2c0d0e-4779-43c8-9baa-9e0d74307079">
+
+### Admin's Screens
+
+1) Home Screen
+   ![image](https://github.com/user-attachments/assets/7bbefed0-416d-4153-b57b-4c7c0edb4714)
+
+2) Add New Product Screen
+   ![image](https://github.com/user-attachments/assets/aabe02bf-60e7-4950-9aa8-4d3f16ab7e29)
+
+3) All Product & Edit Products Screen
+   ![image](https://github.com/user-attachments/assets/934f0610-156b-4149-b720-fd60ea4caa17)
+
+4) Edit Product Screen
+   ![image](https://github.com/user-attachments/assets/a75e8463-7733-48b0-b139-e486e4448011)
+
+5) Add New Price Screen
+   ![image](https://github.com/user-attachments/assets/8a15e89a-30ec-4a10-92c6-45b3d714b6f6)
+
+6) Add New Category Screen
+   ![image](https://github.com/user-attachments/assets/49e9be3b-448f-4ecf-a8a5-7259d4ba1afe)
+
+7) Manage Category Relationship Screen
+   ![image](https://github.com/user-attachments/assets/b89c49b9-c080-4296-bffd-de6dbbc41f5d)
+
+8) Orders Screen
+   ![image](https://github.com/user-attachments/assets/1eea5b55-9e5e-42e1-80ef-deb2263fa912)
+
+9) View Order Details Screen
+    ![image](https://github.com/user-attachments/assets/c6f49047-aa7e-40ee-b83b-541a7a0ac51f)
+
+    
+
+   
+
+
+   
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+   
+
+
