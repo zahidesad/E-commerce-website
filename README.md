@@ -61,7 +61,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     surname VARCHAR(255);
-    tc_number VARCHAR(11);
+    tc_number BIGINT;
     birth_year INT;
     email VARCHAR(100) UNIQUE,
     mobile_number VARCHAR(15),
