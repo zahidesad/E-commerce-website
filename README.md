@@ -42,14 +42,46 @@ This is a comprehensive e-commerce website project developed as part of an inter
 1) Clone the repository
    git clone https://github.com/yourusername/ecommerce-website.git
    cd ecommerce-website
-2) Configure the database
+2) Open a file called application.properties in the src/main/resources directory and fill in the following information according to your needs.
+
+   ``` java
+   #View Resolver settings
+   spring.mvc.view.prefix=/WEB-INF/view/
+   spring.mvc.view.suffix=.jsp
+
+   #Server settings
+   server.port=8080
+
+   #Database settings
+   spring.datasource.url=jdbc:mysql://localhost:3306/e-commerce-website
+   spring.datasource.username=your_database_username
+   spring.datasource.password=your_database_password
+   spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+   #Hibernate settings
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=true
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+   spring.jpa.open-in-view=true
+
+   #E-mail verification
+   spring.mail.host=smtp.gmail.com
+   spring.mail.port=587
+   spring.mail.username=your_email_address
+   spring.mail.password=your_email_app_password
+   spring.mail.properties.mail.smtp.auth=true
+   spring.mail.properties.mail.smtp.starttls.enable=true
+   spring.mail.properties.mail.debug=true
+   ```
+
+3) Configure the database
    - Create a MySQL database named e-commerce-website.
    - Update the application.properties file with your MySQL username and password.
-3) Build the project
+4) Build the project
    - mvn clean install
-4) Deploy to Tomcat
+5) Deploy to Tomcat
    - Copy the generated WAR file from target/ecommerce-website.war to the webapps directory of your Tomcat server.
-5) Start the Tomcat server
+6) Start the Tomcat server
    - Access the application at http://localhost:8080/ecommerce-website
 
 ## Database Design:
@@ -69,10 +101,11 @@ This is a comprehensive e-commerce website project developed as part of an inter
     answer VARCHAR(200),
     password VARCHAR(100),
     role VARCHAR(50),
-    enabled TINYINT(1) DEFAULT 1
+    enabled TINYINT(1) DEFAULT 0
+    verification_code VARCHAR(64)
 );
 
-2) CREATE TABLE address (
+3) CREATE TABLE address (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     address VARCHAR(500),
@@ -82,12 +115,12 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-3)  CREATE TABLE category (
+4)  CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(200)
 );
 
-4)  CREATE TABLE category_relationship (
+5)  CREATE TABLE category_relationship (
     parent_category_id INT,
     child_category_id INT,
     PRIMARY KEY (parent_category_id, child_category_id),
@@ -95,7 +128,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (child_category_id) REFERENCES category(id)
 );
 
-5)  CREATE TABLE product (
+6)  CREATE TABLE product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(500),
     active VARCHAR(10)
@@ -103,7 +136,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     photo_name VARCHAR(255)
 );
 
-6)  CREATE TABLE product_category (
+7)  CREATE TABLE product_category (
     product_id INT,
     category_id INT,
     PRIMARY KEY (product_id, category_id),
@@ -111,7 +144,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
 
-7)  CREATE TABLE price (
+8)  CREATE TABLE price (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
     price INT,
@@ -120,20 +153,20 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
-8)  CREATE TABLE stock (
+9)  CREATE TABLE stock (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
     quantity INT,
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
-9)  CREATE TABLE cart (
+10)  CREATE TABLE cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-10) CREATE TABLE cart_item (
+11) CREATE TABLE cart_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cart_id INT,
     product_id INT,
@@ -144,7 +177,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
-11) CREATE TABLE orders (
+12) CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     order_date DATE,
@@ -157,7 +190,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (address_id) REFERENCES address(id)
 );
 
-12) CREATE TABLE order_item (
+13) CREATE TABLE order_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     product_id INT,
