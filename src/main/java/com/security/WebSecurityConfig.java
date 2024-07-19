@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -21,7 +22,8 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/register"),
                                 new AntPathRequestMatcher("/forgotPassword"),
-                                new AntPathRequestMatcher("/api/products/**")).permitAll()
+                                new AntPathRequestMatcher("/api/products/**"),
+                                new AntPathRequestMatcher("/verify/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/addToCart"),
                                 new AntPathRequestMatcher("/myCart")).authenticated()
                         .anyRequest().authenticated()
@@ -29,7 +31,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(customAuthenticationSuccessHandler())
-                        .failureUrl("/login?error=true")
+                        .failureHandler(customAuthenticationFailureHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -42,6 +44,11 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 
 }

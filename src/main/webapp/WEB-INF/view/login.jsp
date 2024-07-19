@@ -21,11 +21,14 @@
         </div>
     </div>
     <div class='whysignLogin'>
-
         <c:if test="${param.error != null}">
-            <div class="error-message">Wrong username or password</div>
+            <div class="error-message">
+                <c:choose>
+                    <c:when test="${param.error eq 'bad_credentials'}">Wrong username or password</c:when>
+                    <c:when test="${param.error eq 'disabled'}">Your account is not enabled yet. Please verify your email.</c:when>
+                </c:choose>
+            </div>
         </c:if>
-
         <h2>Online Shopping</h2>
         <p>The Online Shopping System allows users to shop online without visiting the stores.</p>
     </div>

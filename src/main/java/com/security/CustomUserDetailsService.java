@@ -38,6 +38,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         String password = (String) userMap.get("password");
         Boolean enabled = (Boolean) userMap.get("enabled");
 
+        if (enabled == null || !enabled) {
+            throw new UsernameNotFoundException("User is not enabled");
+        }
+
         List<GrantedAuthority> authorities = getAuthorities(email);
 
         return new User(email, password, enabled, true, true, true, authorities);

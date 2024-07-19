@@ -48,7 +48,21 @@ public class UserService {
 
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
         return userRepository.save(user);
     }
+
+    public Optional<User> findByVerificationCode(String code) {
+        return userRepository.findByVerificationCode(code);
+    }
+
+    public boolean isEmailAlreadyInUse(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
+
+    public Boolean isAccountEnabled(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.map(User::isEnabled).orElse(null);
+    }
+
 }

@@ -52,7 +52,7 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring-security.xml, /WEB-INF/spring-servlet.xml</param-value>
+    <param-value>/WEB-INF/spring-security.xml, /WEB-INF/spring-servlet.xml, classpath:spring-mail.xml</param-value>
   </context-param>
 
   <servlet>

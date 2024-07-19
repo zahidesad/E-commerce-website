@@ -20,6 +20,8 @@ public class User {
     private String password;
     private String role;
     private boolean enabled;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
 
     public User() {
     }
@@ -112,5 +114,8 @@ public class User {
         this.enabled = enabled;
     }
 
+    public String getVerificationCode() { return verificationCode; }
+
+    public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
 
 }

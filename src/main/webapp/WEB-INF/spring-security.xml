@@ -8,6 +8,9 @@
                                  http://www.springframework.org/schema/security
                                  https://www.springframework.org/schema/security/spring-security.xsd">
 
+
+    <beans:import resource="classpath:spring-mail.xml"/>
+
     <security:http pattern="/css/**" security="none"/>
     <security:http pattern="/js/**" security="none"/>
     <security:http pattern="/images/**" security="none"/>
@@ -17,6 +20,7 @@
         <security:intercept-url pattern="/login" access="permitAll"/>
         <security:intercept-url pattern="/register" access="permitAll"/>
         <security:intercept-url pattern="/forgotPassword" access="permitAll"/>
+        <security:intercept-url pattern="/verify/**" access="permitAll"/>
         <security:intercept-url pattern="/addToCart" access="isAuthenticated()" />
         <security:intercept-url pattern="/myCart" access="isAuthenticated()" />
 
@@ -26,7 +30,7 @@
 
         <security:form-login login-page="/login"
                              authentication-success-handler-ref="customAuthenticationSuccessHandler"
-                             authentication-failure-url="/login?error=true"
+                             authentication-failure-handler-ref="customAuthenticationFailureHandler"
                              login-processing-url="/j_spring_security_check"
                              username-parameter="j_username"
                              password-parameter="j_password"/>
@@ -52,6 +56,7 @@
     </beans:bean>
 
     <beans:bean id="customAuthenticationSuccessHandler" class="com.security.CustomAuthenticationSuccessHandler"/>
+    <beans:bean id="customAuthenticationFailureHandler" class="com.security.CustomAuthenticationFailureHandler"/>
 
     <beans:bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="passwordEncoder"/>
 </beans:beans>
