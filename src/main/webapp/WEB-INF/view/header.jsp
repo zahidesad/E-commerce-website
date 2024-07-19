@@ -52,31 +52,28 @@
 <body>
 <!--Header-->
 <div class="topnav sticky">
-    <%
-        String email = (String) session.getAttribute("email").toString();
-        if (email != null) {
-    %>
-    <center><h2>Online shopping </h2></center>
-    <h2><a href=""> <% out.println(email); %> <i class='fas fa-user-alt'></i></a></h2>
-    <a href="<c:url value='/home'/>">Home <i class="fa fa-home"></i></a>
-    <a href="<c:url value='/myCart'/>">My Cart <i class='fas fa-cart-arrow-down'></i></a>
-    <a href="<c:url value='/myOrders'/>">My Orders <i class='fab fa-elementor'></i></a>
-    <a href="<c:url value='/myAddress'/>">My Address <i class="fa fa-address-book"></i></a>
-    <a href="<c:url value='/logout'/>">Logout <i class='fas fa-share-square'></i></a>
-    <div class="search-container">
-        <form action="<c:url value='/search'/>" method="get">
-            <input type="text" placeholder="Search" name="query">
-            <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-    </div>
-    <%
-    } else {
-    %>
-    <center><h2>Online shopping </h2></center>
-    <a href="<c:url value='/login'/>">Login <i class="fa fa-sign-in-alt"></i></a>
-    <%
-        }
-    %>
+    <c:choose>
+        <c:when test="${not empty sessionScope.email}">
+            <center><h2>Online shopping </h2></center>
+            <h2><a href=""> ${sessionScope.email} <i class='fas fa-user-alt'></i></a></h2>
+            <a href="<c:url value='/home'/>">Home <i class="fa fa-home"></i></a>
+            <a href="<c:url value='/myCart'/>">My Cart <i class='fas fa-cart-arrow-down'></i></a>
+            <a href="<c:url value='/myOrders'/>">My Orders <i class='fab fa-elementor'></i></a>
+            <a href="<c:url value='/myAddress'/>">My Address <i class="fa fa-address-book"></i></a>
+            <a href="<c:url value='/profile'/>">My Profile <i class='fa fa-user'></i></a>
+            <a href="<c:url value='/logout'/>">Logout <i class='fas fa-share-square'></i></a>
+            <div class="search-container">
+                <form action="<c:url value='/search'/>" method="get">
+                    <input type="text" placeholder="Search" name="query">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <center><h2>Online shopping </h2></center>
+            <a href="<c:url value='/login'/>">Login <i class="fa fa-sign-in-alt"></i></a>
+        </c:otherwise>
+    </c:choose>
 </div>
 <!--table-->
 </body>

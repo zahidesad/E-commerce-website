@@ -19,6 +19,7 @@
             <tr>
                 <th>Order ID</th>
                 <th>Customer Name</th>
+                <th>Customer Surname</th>
                 <th>Order Date</th>
                 <th>Total</th>
                 <th>Status</th>
@@ -30,6 +31,7 @@
                 <tr>
                     <td>${order.id}</td>
                     <td>${order.user.name}</td>
+                    <td>${order.user.surname}</td>
                     <td>${order.orderDate}</td>
                     <td>${order.total}</td>
                     <td>${order.status}</td>
