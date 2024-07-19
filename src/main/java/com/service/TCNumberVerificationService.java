@@ -1,34 +1,19 @@
 package com.service;
 
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import com.tc.ObjectFactory;
 import com.tc.TCKimlikNoDogrula;
 import com.tc.TCKimlikNoDogrulaResponse;
 
-import jakarta.xml.soap.MessageFactory;
 
 @Service
 public class TCNumberVerificationService {
 
-    private final WebServiceTemplate webServiceTemplate;
+    private WebServiceTemplate webServiceTemplate;
 
-    public TCNumberVerificationService() throws Exception {
-        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory(MessageFactory.newInstance());
-        messageFactory.afterPropertiesSet();
-
-        webServiceTemplate = new WebServiceTemplate(messageFactory);
-
-        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContextPath("com.tc");
-        marshaller.afterPropertiesSet();
-
-        webServiceTemplate.setMarshaller(marshaller);
-        webServiceTemplate.setDefaultUri("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
-        webServiceTemplate.setUnmarshaller(marshaller);
-        webServiceTemplate.afterPropertiesSet();
+    public void setWebServiceTemplate(WebServiceTemplate webServiceTemplate) {
+        this.webServiceTemplate = webServiceTemplate;
     }
 
     public boolean verify(long tcNumber, String name, String surname, int birthYear) {
@@ -45,7 +30,6 @@ public class TCNumberVerificationService {
 
             return response.isTCKimlikNoDogrulaResult();
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

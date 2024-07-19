@@ -20,6 +20,26 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- Multipart Resolver -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+    <!-- Web Service Configuration -->
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
+        <property name="messageFactory">
+            <bean class="com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl"/>
+        </property>
+    </bean>
+
+    <bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="com.tc"/>
+    </bean>
+
+    <bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+        <constructor-arg ref="messageFactory"/>
+        <property name="marshaller" ref="jaxb2Marshaller"/>
+        <property name="unmarshaller" ref="jaxb2Marshaller"/>
+        <property name="defaultUri" value="https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL"/>
+    </bean>
+
+    <bean id="TCNumberVerificationService" class="com.service.TCNumberVerificationService">
+        <property name="webServiceTemplate" ref="webServiceTemplate"/>
+    </bean>
+
 </beans>
