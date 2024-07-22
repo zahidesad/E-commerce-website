@@ -89,6 +89,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
 
 ## Database Creation Commands:
 
+```
 1)  CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -104,8 +105,10 @@ This is a comprehensive e-commerce website project developed as part of an inter
     enabled TINYINT(1) DEFAULT 0
     verification_code VARCHAR(64)
 );
+```
 
-3) CREATE TABLE address (
+```
+2) CREATE TABLE address (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     address VARCHAR(500),
@@ -114,37 +117,47 @@ This is a comprehensive e-commerce website project developed as part of an inter
     country VARCHAR(100),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+```
 
-4)  CREATE TABLE category (
+```
+3)  CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(200)
 );
+```
 
-5)  CREATE TABLE category_relationship (
+```
+4)  CREATE TABLE category_relationship (
     parent_category_id INT,
     child_category_id INT,
     PRIMARY KEY (parent_category_id, child_category_id),
     FOREIGN KEY (parent_category_id) REFERENCES category(id),
     FOREIGN KEY (child_category_id) REFERENCES category(id)
 );
+```
 
-6)  CREATE TABLE product (
+```
+5)  CREATE TABLE product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(500),
     active VARCHAR(10)
     photo_data LONGBLOB
     photo_name VARCHAR(255)
 );
+```
 
-7)  CREATE TABLE product_category (
+```
+6)  CREATE TABLE product_category (
     product_id INT,
     category_id INT,
     PRIMARY KEY (product_id, category_id),
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
+```
 
-8)  CREATE TABLE price (
+```
+7)  CREATE TABLE price (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
     price INT,
@@ -152,21 +165,27 @@ This is a comprehensive e-commerce website project developed as part of an inter
     end_date DATE,
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
+```
 
-9)  CREATE TABLE stock (
+```
+8)  CREATE TABLE stock (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
     quantity INT,
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
+```
 
-10)  CREATE TABLE cart (
+```
+9)  CREATE TABLE cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+```
 
-11) CREATE TABLE cart_item (
+```
+10) CREATE TABLE cart_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cart_id INT,
     product_id INT,
@@ -176,8 +195,10 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (cart_id) REFERENCES cart(id),
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
+```
 
-12) CREATE TABLE orders (
+```
+11) CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     order_date DATE,
@@ -189,8 +210,10 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (user_id) REFERENCES users(id)
     FOREIGN KEY (address_id) REFERENCES address(id)
 );
+```
 
-13) CREATE TABLE order_item (
+```
+12) CREATE TABLE order_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     product_id INT,
@@ -200,6 +223,7 @@ This is a comprehensive e-commerce website project developed as part of an inter
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
+```
 
 ## Usage
 
