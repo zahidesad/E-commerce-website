@@ -62,7 +62,7 @@ public class OrderController {
                 int amountInCents = (int) (totalAmount * 100);
                 String chargeId = stripeService.createCharge(stripeToken, amountInCents);
                 order.setTransactionId(chargeId);
-                order.setStatus("Approved");
+                order.setStatus("Pending");
             } catch (Exception e) {
                 e.printStackTrace();
                 model.addAttribute("msg", "Payment failed: " + e.getMessage());
