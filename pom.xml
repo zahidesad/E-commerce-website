@@ -227,6 +227,13 @@
       <optional>true</optional>
     </dependency>
 
+    <dependency>
+      <groupId>com.stripe</groupId>
+      <artifactId>stripe-java</artifactId>
+      <version>26.3.0</version>
+    </dependency>
+
+
 
   </dependencies>
 

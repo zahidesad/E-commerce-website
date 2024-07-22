@@ -100,4 +100,15 @@ public class CartService {
     public void deleteCartItemByProductId(Long productId) {
         cartItemRepository.deleteByProductId(productId);
     }
+
+    public int calculateTotalAmount(Long userId) {
+        Cart cart = getOrCreateCartByUserId(userId);
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (CartItem item : cart.getCartItems()) {
+            totalAmount = totalAmount.add(item.getTotal());
+        }
+        return totalAmount.intValue();
+    }
+
+
 }

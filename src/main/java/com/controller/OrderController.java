@@ -5,6 +5,7 @@ import com.model.Order;
 import com.model.OrderItem;
 import com.service.CartService;
 import com.service.OrderService;
+import com.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +26,25 @@ public class OrderController {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private StripeService stripeService;
+
+
 
     @PostMapping("/completeOrder")
     public String completeOrder(HttpSession session, @RequestParam("addressId") Long addressId,
-                                @RequestParam("paymentMethod") String paymentMethod, Model model) {
+                                @RequestParam("paymentMethod") String paymentMethod,
+                                @RequestParam("totalAmount") double totalAmount,
+                                @RequestParam(value = "stripeToken", required = false) String stripeToken, Model model) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
         }
+
+        System.out.println("Address ID: " + addressId);
+        System.out.println("Payment Method: " + paymentMethod);
+        System.out.println("Total Amount: " + totalAmount);
+        System.out.println("Stripe Token: " + stripeToken);
 
         Order order = new Order();
         order.setUserId(userId);
@@ -45,6 +57,19 @@ public class OrderController {
         String transactionId = UUID.randomUUID().toString();
         order.setTransactionId(transactionId);
 
+        if ("Credit Card".equals(paymentMethod)) {
+            try {
+                int amountInCents = (int) (totalAmount * 100);
+                String chargeId = stripeService.createCharge(stripeToken, amountInCents);
+                order.setTransactionId(chargeId);
+                order.setStatus("Approved");
+            } catch (Exception e) {
+                e.printStackTrace();
+                model.addAttribute("msg", "Payment failed: " + e.getMessage());
+                return "orderDetails";
+            }
+        }
+
         Cart cart = cartService.getOrCreateCartByUserId(userId);
         List<OrderItem> orderItems = orderService.convertCartItemsToOrderItems(cart.getCartItems(), order);
 
@@ -55,6 +80,7 @@ public class OrderController {
         model.addAttribute("order", order);
         return "orderConfirmation";
     }
+
 
 
     private Date getDeliveryDate(int daysToAdd) {
