@@ -3,8 +3,10 @@ package com.controller;
 import com.model.Address;
 import com.model.Cart;
 import com.model.CartItem;
+import com.model.Product;
 import com.service.AddressService;
 import com.service.CartService;
+import com.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CartController {
@@ -23,6 +26,9 @@ public class CartController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/myCart")
     public String viewCart(HttpSession session, Model model) {
@@ -40,10 +46,17 @@ public class CartController {
     }
 
     @PostMapping("/addToCart")
-    public String addToCart(@RequestParam("productId") Long productId, @RequestParam("quantity") int quantity, HttpSession session) {
+    public String addToCart(@RequestParam("productId") Long productId, @RequestParam("quantity") int quantity, HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
+        }
+
+        if (!productService.isProductInStock(productId)) {
+            model.addAttribute("msg", "Product is out of stock.");
+            Optional<Product> productOptional = productService.getProductById(productId);
+            productOptional.ifPresent(product -> model.addAttribute("product", product));
+            return "productDetails";
         }
 
         Cart cart = cartService.getOrCreateCartByUserId(userId);
@@ -51,6 +64,7 @@ public class CartController {
 
         return "redirect:/myCart";
     }
+
 
     @GetMapping("/incDecQuantity")
     public String incDecQuantity(@RequestParam("id") Long id, @RequestParam("quantity") String quantity) {

@@ -154,4 +154,17 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(query);
     }
 
+    @Transactional
+    public boolean isProductInStock(Long productId) {
+        Optional<Product> productOpt = getProductById(productId);
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            int totalStock = product.getStocks().stream()
+                    .mapToInt(Stock::getQuantity)
+                    .sum();
+            return totalStock > 0;
+        }
+        return false;
+    }
+
 }

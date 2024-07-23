@@ -66,4 +66,15 @@ public class ProductController {
         model.addAttribute("products", products);
         return "searchHome";
     }
+
+    @GetMapping("/productDetails")
+    public String getProductDetails(@RequestParam("productId") Long productId, Model model) {
+        Optional<Product> productOptional = productService.getProductById(productId);
+        if (productOptional.isPresent()) {
+            model.addAttribute("product", productOptional.get());
+            return "productDetails";
+        } else {
+            return "redirect:/error";
+        }
+    }
 }
