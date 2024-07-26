@@ -1,7 +1,7 @@
 package com.security;
 
+import com.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -10,52 +10,40 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private JdbcTemplate jdbcTemplate;
-
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        String userQuery = "SELECT email, password, enabled FROM users WHERE email = ?";
-        List<Map<String, Object>> userRows = jdbcTemplate.queryForList(userQuery, email);
+        Optional<com.model.User> user = userRepository.findByEmail(email);
 
-        if (userRows.isEmpty()) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        Map<String, Object> userMap = userRows.get(0);
-        String password = (String) userMap.get("password");
-        Boolean enabled = (Boolean) userMap.get("enabled");
+        com.model.User u = user.get();
+        String password = u.getPassword();
+        Boolean enabled = u.isEnabled();
 
         if (enabled == null || !enabled) {
             throw new UsernameNotFoundException("User is not enabled");
         }
 
-        List<GrantedAuthority> authorities = getAuthorities(email);
+        List<GrantedAuthority> authorities = getAuthorities(u);
 
         return new User(email, password, enabled, true, true, true, authorities);
     }
 
-    private List<GrantedAuthority> getAuthorities(String email) {
-        String roleQuery = "SELECT role FROM users WHERE email = ?";
-        List<String> roles = jdbcTemplate.queryForList(roleQuery, String.class, email);
-
+    private List<GrantedAuthority> getAuthorities(com.model.User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
         return authorities;
     }
 }
