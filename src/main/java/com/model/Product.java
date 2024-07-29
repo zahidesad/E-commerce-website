@@ -23,7 +23,7 @@ public class Product {
     private String active;
 
     @Lob
-    @Column(name = "photo_data")
+    @Column(name = "photo_data", columnDefinition = "MEDIUMBLOB")
     private byte[] photoData;
 
     @Column(name = "photo_name")

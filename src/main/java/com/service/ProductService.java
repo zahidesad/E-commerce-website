@@ -33,8 +33,6 @@ public class ProductService {
 
     @Autowired
     private StockRepository stockRepository;
-    
-    private SolrIndexingService solrIndexingService;
 
     @Transactional
     public void saveProduct(Product product, BigDecimal price, int quantity, Date startDate, Date endDate, List<Long> categoryIds) {
@@ -55,8 +53,6 @@ public class ProductService {
         stockRepository.save(stock);
 
         product.getStocks().add(stock);
-
-        solrIndexingService.indexProduct(product);
     }
 
 
@@ -147,13 +143,13 @@ public class ProductService {
         //existingPrices.removeIf(price -> !updatedPriceIds.contains(price.getId()));
 
         productRepository.save(product);
-        solrIndexingService.indexProduct(product);
+
     }
 
     public void deleteProductById(Long id) {
         cartService.deleteCartItemByProductId(id); // First delete product from cart
         productRepository.deleteById(id); // Then, delete product
-        solrIndexingService.deleteProductFromSolr(id);
+
     }
 
     public List<Product> searchProducts(String query) {

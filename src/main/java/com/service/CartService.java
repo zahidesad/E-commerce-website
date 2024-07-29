@@ -43,6 +43,10 @@ public class CartService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
         BigDecimal currentPrice = priceRepository.findCurrentPriceByProductId(productId);
 
+        if (currentPrice == null) {
+            throw new IllegalArgumentException("Current price not found for product ID: " + productId);
+        }
+
         Optional<CartItem> existingCartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
         if (existingCartItem.isPresent()) {
             CartItem item = existingCartItem.get();

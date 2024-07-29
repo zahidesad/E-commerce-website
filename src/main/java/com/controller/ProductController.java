@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
-public class ProductController {
+public class    ProductController {
     @Autowired
     private ProductService productService;
 
@@ -31,6 +31,7 @@ public class ProductController {
                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
                                                  @RequestParam List<Long> categoryIds) {
+
         productService.saveProduct(product, price, quantity, startDate, endDate, categoryIds);
         return ResponseEntity.ok(product);
     }
