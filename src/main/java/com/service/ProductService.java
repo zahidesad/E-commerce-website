@@ -8,11 +8,13 @@ import com.repository.CategoryRepository;
 import com.repository.PriceRepository;
 import com.repository.ProductRepository;
 import com.repository.StockRepository;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -34,6 +36,9 @@ public class ProductService {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private SolrIndexingService solrIndexingService;
+
     @Transactional
     public void saveProduct(Product product, BigDecimal price, int quantity, Date startDate, Date endDate, List<Long> categoryIds) {
         List<Category> categories = categoryRepository.findAllById(categoryIds);
@@ -45,6 +50,10 @@ public class ProductService {
         productPrice.setPrice(price);
         productPrice.setStartDate(startDate);
         productPrice.setEndDate(endDate);
+        List<Price> prices = new ArrayList<>();
+        prices.add(productPrice);
+        product.setPrices(prices);
+
         priceRepository.save(productPrice);
 
         Stock stock = new Stock();
@@ -53,6 +62,11 @@ public class ProductService {
         stockRepository.save(stock);
 
         product.getStocks().add(stock);
+        try {
+            solrIndexingService.indexProduct(product);
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -149,6 +163,12 @@ public class ProductService {
     public void deleteProductById(Long id) {
         cartService.deleteCartItemByProductId(id); // First delete product from cart
         productRepository.deleteById(id); // Then, delete product
+
+        try {
+            solrIndexingService.deleteProduct(id);
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+        }
 
     }
 
