@@ -52,7 +52,7 @@ public class SolrIndexingService {
     }
 
     public void deleteProduct(Long productId) throws IOException, SolrServerException {
-        solrClient.deleteById("products",productId.toString());
+        solrClient.deleteById("products", productId.toString());
         solrClient.commit("products");
     }
 }

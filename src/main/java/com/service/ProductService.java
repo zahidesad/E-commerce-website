@@ -73,7 +73,6 @@ public class ProductService {
     }
 
 
-
     @Transactional
     public List<Product> getAllProducts() {
         List<Product> products = productRepository.findAll();
@@ -96,72 +95,86 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(Product product, Long categoryId, String active, int quantity, List<Long> priceIds, List<BigDecimal> priceAmounts, List<Date> startDates, List<Date> endDates) {
-        // Update category
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        category.ifPresent(value -> product.setCategories(List.of(value)));
+    public void updateProduct(Product updatedProduct, Long categoryId, String active, int quantity, List<Long> priceIds, List<BigDecimal> priceAmounts, List<Date> startDates, List<Date> endDates) {
+        Optional<Product> existingProductOpt = productRepository.findById(updatedProduct.getId());
+        if (existingProductOpt.isPresent()) {
+            Product existingProduct = existingProductOpt.get();
 
-        // Update active status
-        product.setActive(active);
+            // Update only the specified fields
+            existingProduct.setName(updatedProduct.getName());
+            existingProduct.setActive(active);
 
-        // Update quantity
-        List<Stock> stocks = product.getStocks();
-        Stock stock;
-        if (stocks == null || stocks.isEmpty()) {
-            stock = new Stock();
-            stock.setProduct(product);
-            stock.setQuantity(quantity);
-            stocks.add(stock);
-        } else {
-            stock = stocks.get(0); // Assuming single stock record per product
-            stock.setQuantity(quantity);
-        }
-        stockRepository.save(stock);
+            // Update category
+            Optional<Category> category = categoryRepository.findById(categoryId);
+            category.ifPresent(value -> existingProduct.setCategories(new ArrayList<>(List.of(value))));
 
-        // Ensure prices are loaded
-        List<Price> existingPrices = product.getPrices();
-        if (existingPrices == null) {
-            existingPrices = new ArrayList<>();
-            product.setPrices(existingPrices);
-        }
+            // Update quantity
+            List<Stock> stocks = existingProduct.getStocks();
+            Stock stock;
+            if (stocks == null || stocks.isEmpty()) {
+                stock = new Stock();
+                stock.setProduct(existingProduct);
+                stock.setQuantity(quantity);
+                stocks.add(stock);
+            } else {
+                stock = stocks.get(0); // Assuming single stock record per product
+                stock.setQuantity(quantity);
+            }
+            stockRepository.save(stock);
 
-        // Track updated prices
-        List<Long> updatedPriceIds = new ArrayList<>();
+            // Ensure prices are loaded
+            List<Price> existingPrices = new ArrayList<>(existingProduct.getPrices());
+            if (existingPrices == null) {
+                existingPrices = new ArrayList<>();
+                existingProduct.setPrices(existingPrices);
+            }
 
-        // Update existing prices and add new ones
-        for (int i = 0; i < priceIds.size(); i++) {
-            Long priceId = priceIds.get(i);
-            boolean priceFound = false;
+            // Track updated prices
+            List<Long> updatedPriceIds = new ArrayList<>();
 
-            for (Price price : existingPrices) {
-                if (price.getId().equals(priceId)) {
-                    price.setPrice(priceAmounts.get(i));
-                    price.setStartDate(startDates.get(i));
-                    price.setEndDate(endDates.get(i));
-                    updatedPriceIds.add(priceId);
-                    priceFound = true;
-                    break;
+            // Update existing prices and add new ones
+            for (int i = 0; i < priceIds.size(); i++) {
+                Long priceId = priceIds.get(i);
+                boolean priceFound = false;
+
+                for (Price price : existingPrices) {
+                    if (price.getId().equals(priceId)) {
+                        price.setPrice(priceAmounts.get(i));
+                        price.setStartDate(startDates.get(i));
+                        price.setEndDate(endDates.get(i));
+                        updatedPriceIds.add(priceId);
+                        priceFound = true;
+                        break;
+                    }
+                }
+
+                // If price not found, it's a new price
+                if (!priceFound) {
+                    Price newPrice = new Price();
+                    newPrice.setPrice(priceAmounts.get(i));
+                    newPrice.setStartDate(startDates.get(i));
+                    newPrice.setEndDate(endDates.get(i));
+                    newPrice.setProduct(existingProduct);
+                    priceRepository.save(newPrice); // Save new price to ensure ID is generated
+                    existingPrices.add(newPrice);
+                    updatedPriceIds.add(newPrice.getId()); // Add the new price ID to the updated list
                 }
             }
 
-            // If price not found, it's a new price
-            if (!priceFound) {
-                Price newPrice = new Price();
-                newPrice.setPrice(priceAmounts.get(i));
-                newPrice.setStartDate(startDates.get(i));
-                newPrice.setEndDate(endDates.get(i));
-                newPrice.setProduct(product);
-                priceRepository.save(newPrice); // Save new price to ensure ID is generated
-                existingPrices.add(newPrice);
-                updatedPriceIds.add(newPrice.getId()); // Add the new price ID to the updated list
+            // Remove prices that are no longer present
+            existingPrices.removeIf(price -> !updatedPriceIds.contains(price.getId()));
+
+            productRepository.save(existingProduct);
+
+            try {
+                solrIndexingService.indexProduct(existingProduct);
+            } catch (IOException | SolrServerException e) {
+                e.printStackTrace();
             }
         }
-        // Remove prices that are no longer present
-        //existingPrices.removeIf(price -> !updatedPriceIds.contains(price.getId()));
-
-        productRepository.save(product);
-
     }
+
+
 
     public void deleteProductById(Long id) {
         cartService.deleteCartItemByProductId(id); // First delete product from cart
