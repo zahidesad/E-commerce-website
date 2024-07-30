@@ -32,31 +32,47 @@ public class SolrProductService {
             product.setId(Long.parseLong((String) document.getFieldValue("id")));
             product.setName((String) document.getFieldValue("name"));
 
-            // Convert the 'active' field correctly
             Object activeField = document.getFieldValue("active");
-            if (activeField instanceof Boolean) {
-                product.setActive(((Boolean) activeField).toString());
-            } else if (activeField instanceof String) {
-                product.setActive((String) activeField);
-            }
+            product.setActive(((Boolean) activeField).toString());
 
             product.setPhotoName((String) document.getFieldValue("photo_name"));
 
-            // Convert the 'stock' field correctly
             Object stockField = document.getFieldValue("stock");
-            if (stockField instanceof Long) {
-                product.setStock(((Long) stockField).intValue());
-            } else if (stockField instanceof Integer) {
-                product.setStock((Integer) stockField);
-            }
+            product.setStock(((Long) stockField).intValue());
 
             if (document.getFieldValue("current_price") != null) {
                 product.setCurrentPrice(new BigDecimal(document.getFieldValue("current_price").toString()));
             }
-
             products.add(product);
         }
+        return products;
+    }
 
+    public List<Product> searchProductsInSolr(String queryString) throws IOException, SolrServerException {
+        List<Product> products = new ArrayList<>();
+        SolrQuery query = new SolrQuery();
+        query.setQuery("name:" + queryString + " OR categories:" + queryString);
+        QueryResponse response = solrClient.query("products", query);
+        SolrDocumentList documents = response.getResults();
+
+        for (SolrDocument document : documents) {
+            Product product = new Product();
+            product.setId(Long.parseLong((String) document.getFieldValue("id")));
+            product.setName((String) document.getFieldValue("name"));
+
+            Object activeField = document.getFieldValue("active");
+            product.setActive(((Boolean) activeField).toString());
+
+            product.setPhotoName((String) document.getFieldValue("photo_name"));
+
+            Object stockField = document.getFieldValue("stock");
+            product.setStock(((Long) stockField).intValue());
+
+            if (document.getFieldValue("current_price") != null) {
+                product.setCurrentPrice(new BigDecimal(document.getFieldValue("current_price").toString()));
+            }
+            products.add(product);
+        }
         return products;
     }
 }

@@ -44,7 +44,7 @@
                 <div class="col-md-4">
                     <div class="product-card">
                         <c:choose>
-                            <c:when test="${product.photoData != null}">
+                            <c:when test="${product.photoName != null}">
                                 <img src="${pageContext.request.contextPath}/productImage?id=${product.id}" alt="${product.name}" class="product-image">
                             </c:when>
                             <c:otherwise>
@@ -54,8 +54,8 @@
                         <h4 class="product-name">${product.name}</h4>
                         <p class="product-price">Price:
                             <c:choose>
-                                <c:when test="${product.currentPriceValue != null}">
-                                    ${product.currentPriceValue}
+                                <c:when test="${product.currentPrice != null}">
+                                    ${product.currentPrice}
                                 </c:when>
                                 <c:otherwise>
                                     Not Available

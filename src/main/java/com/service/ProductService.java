@@ -39,6 +39,9 @@ public class ProductService {
     @Autowired
     private SolrIndexingService solrIndexingService;
 
+    @Autowired
+    private SolrProductService solrProductService;
+
     @Transactional
     public void saveProduct(Product product, BigDecimal price, int quantity, Date startDate, Date endDate, List<Long> categoryIds) {
         List<Category> categories = categoryRepository.findAllById(categoryIds);
@@ -173,7 +176,12 @@ public class ProductService {
     }
 
     public List<Product> searchProducts(String query) {
-        return productRepository.findByNameContainingIgnoreCase(query);
+        try {
+            return solrProductService.searchProductsInSolr(query);
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     @Transactional
