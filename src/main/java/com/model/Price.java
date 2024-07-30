@@ -1,6 +1,7 @@
 package com.model;
 
 import jakarta.persistence.*;
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class Price {
     private Product product;
 
     @Column(name = "price", nullable = false)
+    @Field
     private BigDecimal price;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

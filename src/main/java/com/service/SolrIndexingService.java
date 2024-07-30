@@ -47,12 +47,12 @@ public class SolrIndexingService {
             document.addField("prices", prices);
         }
 
-        solrClient.add(document);
-        solrClient.commit();
+        solrClient.add("products", document);
+        solrClient.commit("products");
     }
 
     public void deleteProduct(Long productId) throws IOException, SolrServerException {
-        solrClient.deleteById(productId.toString());
-        solrClient.commit();
+        solrClient.deleteById("products",productId.toString());
+        solrClient.commit("products");
     }
 }

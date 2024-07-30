@@ -1,26 +1,32 @@
 package com.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.solr.client.solrj.beans.Field;
 
 @Entity
 @Table(name = "product")
 public class Product {
 
+    public Product() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Field
     private Long id;
 
     @Column(name = "name")
+    @Field
     private String name;
 
     @Column(name = "active")
+    @Field
     private String active;
 
     @Lob
@@ -28,6 +34,7 @@ public class Product {
     private byte[] photoData;
 
     @Column(name = "photo_name")
+    @Field("photo_name")
     private String photoName;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,11 +49,15 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @Field
     private List<Category> categories = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks = new ArrayList<>();
+
+    @Transient
+    private BigDecimal currentPrice;
+
 
     public List<Category> getCategories() {
         return categories;
@@ -123,6 +134,14 @@ public class Product {
                 .collect(Collectors.toList());
     }
 
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     public BigDecimal getCurrentPriceValue() {
         List<Price> currentPrices = getCurrentPrices();
         if (!currentPrices.isEmpty()) {
@@ -150,5 +169,4 @@ public class Product {
             stock.setQuantity(quantity);
         }
     }
-
 }
