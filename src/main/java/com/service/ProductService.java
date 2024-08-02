@@ -210,4 +210,16 @@ public class ProductService {
         return false;
     }
 
+    @Transactional
+    public void indexAllProductsToSolr() {
+        List<Product> products = productRepository.findAll();
+        for (Product product : products) {
+            try {
+                solrIndexingService.indexProduct(product);
+            } catch (IOException | SolrServerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
