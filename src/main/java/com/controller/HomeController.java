@@ -1,12 +1,9 @@
 package com.controller;
 
 import com.model.Category;
-import com.model.Price;
 import com.model.Product;
 import com.service.CategoryService;
 import com.service.ProductService;
-import com.service.SolrProductService;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,34 +22,25 @@ import java.util.Map;
 public class HomeController {
 
     @Autowired
-    private SolrProductService solrProductService;
+    private ProductService productService;
 
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping
-    public String home(Model model) throws SolrServerException, IOException {
-        List<Category> parentCategories = categoryService.getParentCategories();
-        List<Category> childCategories = categoryService.getChildCategories();
-        List<Product> products = null;
-        try {
-            products = solrProductService.getAllProductsFromSolr();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String home(Model model) throws  IOException {
+        List<Category> parent = categoryService.getParentCategories();
+        List<Category> child  = categoryService.getChildCategories();
+        List<Product> products = productService.getAllProducts();   // <-- JPA
 
-        LocalDate now = LocalDate.now();
+        Map<Long,Integer> counts = new HashMap<>();
+        parent.forEach(c -> counts.put(c.getId(), categoryService.getCategoryProductCount(c)));
 
-        Map<Long, Integer> categoryProductCounts = new HashMap<>();
-        for (Category category : parentCategories) {
-            categoryProductCounts.put(category.getId(), categoryService.getCategoryProductCount(category));
-        }
-
-        model.addAttribute("parentCategories", parentCategories);
-        model.addAttribute("childCategories", childCategories);
-        model.addAttribute("products", products);
-        model.addAttribute("now", now);
-        model.addAttribute("categoryProductCounts", categoryProductCounts);
+        model.addAttribute("parentCategories", parent);
+        model.addAttribute("childCategories",  child);
+        model.addAttribute("products",         products);
+        model.addAttribute("now",              LocalDate.now());
+        model.addAttribute("categoryProductCounts", counts);
         return "home";
     }
 

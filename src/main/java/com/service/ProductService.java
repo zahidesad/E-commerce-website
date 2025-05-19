@@ -8,7 +8,6 @@ import com.repository.CategoryRepository;
 import com.repository.PriceRepository;
 import com.repository.ProductRepository;
 import com.repository.StockRepository;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +35,6 @@ public class ProductService {
     @Autowired
     private StockRepository stockRepository;
 
-    @Autowired
-    private SolrIndexingService solrIndexingService;
-
-    @Autowired
-    private SolrProductService solrProductService;
 
     @Transactional
     public void saveProduct(Product product, BigDecimal price, int quantity, Date startDate, Date endDate, List<Long> categoryIds) {
@@ -65,11 +59,6 @@ public class ProductService {
         stockRepository.save(stock);
 
         product.getStocks().add(stock);
-        try {
-            solrIndexingService.indexProduct(product);
-        } catch (IOException | SolrServerException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -79,6 +68,8 @@ public class ProductService {
         products.forEach(product -> {
             Hibernate.initialize(product.getCategories());
             Hibernate.initialize(product.getPrices());
+            Hibernate.initialize(product.getStocks());
+            product.setCurrentPrice(product.getCurrentPriceValue());
         });
         return products;
     }
@@ -90,6 +81,7 @@ public class ProductService {
             Hibernate.initialize(p.getCategories());
             Hibernate.initialize(p.getPrices());
             Hibernate.initialize(p.getStocks());
+            p.setCurrentPrice(p.getCurrentPriceValue());
         });
         return product;
     }
@@ -166,11 +158,6 @@ public class ProductService {
 
             productRepository.save(existingProduct);
 
-            try {
-                solrIndexingService.indexProduct(existingProduct);
-            } catch (IOException | SolrServerException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -179,22 +166,12 @@ public class ProductService {
     public void deleteProductById(Long id) {
         cartService.deleteCartItemByProductId(id); // First delete product from cart
         productRepository.deleteById(id); // Then, delete product
-
-        try {
-            solrIndexingService.deleteProduct(id);
-        } catch (IOException | SolrServerException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public List<Product> searchProducts(String query) {
-        try {
-            return solrProductService.searchProductsInSolr(query);
-        } catch (IOException | SolrServerException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
+        products.forEach(p -> p.setCurrentPrice(p.getCurrentPriceValue()));
+        return products;
     }
 
     @Transactional
@@ -209,17 +186,4 @@ public class ProductService {
         }
         return false;
     }
-
-    @Transactional
-    public void indexAllProductsToSolr() {
-        List<Product> products = productRepository.findAll();
-        for (Product product : products) {
-            try {
-                solrIndexingService.indexProduct(product);
-            } catch (IOException | SolrServerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 }
